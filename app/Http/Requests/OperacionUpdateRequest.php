@@ -3,11 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Rules\OperacionFechaRule;
-use App\Rules\OperacionHorarioEntregaRule;
-use App\Rules\OperacionHoraSedeEntregaRepetidoRule;
 
-class OperacionRequest extends FormRequest
+class OperacionUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -38,8 +35,6 @@ class OperacionRequest extends FormRequest
             'vin'=>'required|max:50',
             'modelo'=>'required|max:50',
             'color'=>'max:50',
-            'sede_entrega'=>'required',
-            'fecha_calendario_entrega'=>['required', new OperacionFechaRule, new OperacionHorarioEntregaRule, new OperacionHoraSedeEntregaRepetidoRule(request()->sede_entrega, request()->fecha_calendario_entrega)],
             'grupo' => 'required_if:tipo_operacion,==,1|numeric',
             'orden' => 'required_if:tipo_operacion,==,1|numeric|min:1|max:168',
             'nro_preventa' => 'required_if:tipo_operacion,==,2|unique:operaciones',
@@ -51,7 +46,6 @@ class OperacionRequest extends FormRequest
         'nro_preventa.required_if' => 'El campo Numero Pre Venta es obligatorio',
         'grupo.required_if' => 'El campo Grupo es obligatorio',
         'orden.required_if' => 'El campo Orden es obligatorio',
-        'fecha_calendario_entrega.required' => 'El campo Fecha de Entrega es obligatorio',
         ];
     }
 }

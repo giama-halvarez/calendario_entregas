@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    You are logged in mother fucker! 
+                    You are logged in! 
                 </div>
             </div>
         </div>

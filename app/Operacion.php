@@ -89,12 +89,16 @@ class Operacion extends Model
         }
     }
 
-    public function fecha_entrega(){
-        return date('d-m-Y', strtotime($this->fecha_calendario_entrega));
+    public function fecha_entrega($formato = 'd-m-Y'){
+        return date($formato, strtotime($this->fecha_calendario_entrega));
     }
 
-    public function hora_entrega(){
-        return date('H:i', strtotime($this->fecha_calendario_entrega));
+    public function hora_entrega($formato = 'H:i'){
+        return date($formato, strtotime($this->fecha_calendario_entrega));
+    }
+
+    public function fecha_calendario_entrega_format($formato = 'd-m-Y h:i A'){
+        return date($formato, strtotime($this->fecha_calendario_entrega));
     }
 
     public function ApeNom(){

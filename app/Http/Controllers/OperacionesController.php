@@ -10,6 +10,8 @@ use App\Accesorio;
 use App\OperacionAccesorio;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\OperacionRequest;
+use App\Http\Requests\OperacionUpdateRequest;
+use App\Http\Requests\EntregaUpdateRequest;
 use Illuminate\Http\Request;
 
 class OperacionesController extends Controller
@@ -161,7 +163,7 @@ class OperacionesController extends Controller
      * @param  \App\Operacion  $operacion
      * @return \Illuminate\Http\Response
      */
-    public function show(Operacion $operacion)
+    public function show(Request $request)
     {
         //
     }
@@ -175,6 +177,44 @@ class OperacionesController extends Controller
     public function edit(Operacion $operacion)
     {
         //
+        if ($operacion != null) {
+
+            $operacion_accesorios = OperacionAccesorio::where('operacion_id','=',$operacion->id)->get();
+
+            $marcas = Marca::where('activo','=',1)->orderBy('nombre')->get();
+            $sedes_entrega = SedeEntrega::where('activo','=',1)->orderBy('nombre')->get();
+            $tipos_operacion = (new TipoOperacion)->get_tipos();
+            $accesorios = Accesorio::where('activo','=',1)->orderBy('nombre')->get();
+            
+            return view('agenda-modificar', compact('operacion', 'operacion_accesorios', 'marcas', 'sedes_entrega', 'tipos_operacion', 'accesorios'));
+        }
+        else{
+            return redirect()->back()->withErrors(['No se encontro la operación']);
+        }
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Operacion  $operacion
+     * @return \Illuminate\Http\Response
+     */
+    public function edit_entrega(Operacion $operacion)
+    {
+        //
+        if ($operacion != null) {
+
+            $operacion_accesorios = OperacionAccesorio::where('operacion_id','=',$operacion->id)->get();
+
+            $marcas = Marca::where('activo','=',1)->orderBy('nombre')->get();
+            $sedes_entrega = SedeEntrega::where('activo','=',1)->orderBy('nombre')->get();
+            $tipos_operacion = (new TipoOperacion)->get_tipos();
+            
+            return view('agenda-modificar-entrega', compact('operacion', 'marcas', 'sedes_entrega', 'tipos_operacion', 'accesorios'));
+        }
+        else{
+            return redirect()->back()->withErrors(['No se encontro la operación']);
+        }
     }
 
     /**
@@ -184,9 +224,78 @@ class OperacionesController extends Controller
      * @param  \App\Operacion  $operacion
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Operacion $operacion)
+    public function update(OperacionUpdateRequest $request, Operacion $operacion)
     {
         //
+        $operacion = Operacion::where('id','=',$request->id)->first();
+
+        $operacion->nombre = $request->nombre;
+        $operacion->apellido = $request->apellido;
+        $operacion->telefono1 = $request->telefono1;
+        $operacion->telefono2 = $request->telefono2;
+        $operacion->telefono3 = $request->telefono3;
+        $operacion->email = $request->email;
+        $operacion->semaforo = $request->semaforo;
+        $operacion->chasis = $request->chasis;
+        $operacion->vin = $request->vin;
+        $operacion->modelo = $request->modelo;
+        $operacion->color = $request->color;
+
+        $operacion->save();
+
+        $operacion_accesorios = OperacionAccesorio::where('operacion_id','=',$operacion->id)->delete();
+    
+        
+        foreach ($request->acc as $key => $value) {
+            $op_acc = new OperacionAccesorio;
+            $op_acc->operacion_id = $request->id;
+            $op_acc->accesorio_id = $key;
+
+            $op_acc->save();
+        }
+
+        return redirect('/agenda/ver/pendientes');
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Operacion  $operacion
+     * @return \Illuminate\Http\Response
+     */
+    public function update_datos_entrega(Operacion $operacion, EntregaUpdateRequest $request)
+    {
+        //
+        $fecha_entrega = \DateTime::createFromFormat('d/m/Y h:i A', $request->fecha_calendario_entrega);
+        //dd($request);
+        $datos = [
+            "sede_entrega_id" => $request->sede_entrega,
+            "fecha_calendario_entrega" => $fecha_entrega,
+        ];
+
+        $operacion->update($datos);
+
+        return redirect('/agenda/ver/pendientes'); 
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Operacion  $operacion
+     * @return \Illuminate\Http\Response
+     */
+    public function update_entrega(Request $request)
+    {
+        //
+        $operacion = Operacion::where('id','=',$request->operacion_id)->first();
+
+        $operacion->estado = $request->entregado;
+
+        $operacion->save();
+
+        return redirect('/agenda/ver/pendientes'); 
     }
 
     /**

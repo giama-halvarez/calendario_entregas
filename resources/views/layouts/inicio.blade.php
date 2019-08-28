@@ -41,15 +41,15 @@
 
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+
+  @yield('extras_head')
+
+
+
 </head>
 <body class="hold-transition skin-blue sidebar-mini" onload="inicializaComponentes();">
 <div class="wrapper">
-
-
-
-
-
-
 
 
 
@@ -74,7 +74,7 @@
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <span class="fa fa-fw fa-user"></span>
-              <span class="hidden-xs">Hernan</span>
+              <span class="hidden-xs">{{auth()->user()->name}}</span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
@@ -82,13 +82,17 @@
                 <img src="{{asset('assets/dist/img/user2-160x160.jpg')}}" class="img-circle" alt="User Image">
 
                 <p>
-                  Hernan Alvarez
+                  {{auth()->user()->name}}
                 </p>
               </li>
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Cerrar sesión</a>
+                    <form action="{{route('logout')}}" method="POST">
+                        <button class="btn btn-default btn-flat">Cerrar sesión
+                        @csrf
+                    </form>
+                  </button>
                 </div>
               </li>
             </ul>
@@ -120,10 +124,10 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MENU PRINCIPAL</li>        
-        <li><a href="{{URL('agenda/ver/pendientes')}}"><i class="fa fa-circle-o text-red"></i> <span>Ver Entregas pactadas</span></a></li>
-        <li><a href="{{URL('agenda/ver/entregados')}}"><i class="fa fa-circle-o text-blue"></i> <span>Ver Entregados</span></a></li>
-        <li><a href="{{route('agenda_crear')}}"><i class="fa fa-circle-o text-yellow"></i> <span>Nueva Entrega</span></a></li>
-        <li><a href="{{route('agenda_recuperar')}}"><i class="fa fa-circle-o text-yellow"></i> <span>Recuperar Datos</span></a></li>
+        <li><a href="{{URL('agenda/ver/pendientes')}}"><i class="fa fa-calendar text-blue"></i> <span>Ver Entregas pactadas</span></a></li>
+        <li><a href="{{URL('agenda/ver/entregados')}}"><i class="fa fa-calendar-check-o text-green"></i> <span>Ver Entregados</span></a></li>
+        <li><a href="{{route('agenda_crear')}}"><i class="fa fa-plus-square text-yellow"></i> <span>Nueva Entrega</span></a></li>
+        <li><a href="{{route('agenda_recuperar')}}"><i class="fa fa-database text-yellow"></i> <span>Recuperar Datos</span></a></li>
       </ul>
     </section>
     <!-- /.sidebar -->
@@ -259,8 +263,20 @@
 
 <script type="text/javascript">
   function inicializaComponentes(){
-    document.getElementById('optionsTipo1').checked = true;
-    seleccionaTipoOperacion(1);
+    var tipos_op = document.getElementsByName('tipo_operacion');
+    var chequeado_tipos_op = false;
+
+    for (var i = 0, length = tipos_op.length; i < length; i++) {
+      if (tipos_op[i].checked) {
+        chequeado_tipos_op = true;
+        seleccionaTipoOperacion(tipos_op[i].value);
+        break;
+      }
+    }
+    if (chequeado_tipos_op == false) {
+      document.getElementById('optionsTipo1').checked = true;
+      seleccionaTipoOperacion(1);
+    }
 
     //document.getElementById('optionsMarca1').checked = true;
     var marcas = document.getElementsByName('marca_id');
@@ -277,19 +293,6 @@
     }
   }
 
-  function seleccionaTipoOperacion($tipo){
-    if ($tipo == 1) {
-      document.getElementById('txtgrupo').disabled = false;
-      document.getElementById('txtorden').disabled = false;
-      document.getElementById('txtpreventa').disabled = true;
-    }
-    if ($tipo == 2){
-      document.getElementById('txtgrupo').disabled = true;
-      document.getElementById('txtorden').disabled = true;
-      document.getElementById('txtpreventa').disabled = false;
-    }
-  }
-
   function completaFechas(){
     var fecha = document.getElementById('datepicker').value;
     var hora = document.getElementById('hora_entrega').value;
@@ -302,6 +305,9 @@
     }
   }
 </script>
+
+
+@yield('extras_js')
 
 </body>
 </html>

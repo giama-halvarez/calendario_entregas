@@ -48,7 +48,7 @@
 					<div class="col-md-4">
 						<div class="radio">
 							<label>
-								<input type="radio" name="tipo_operacion" disabled="true" id="optionsTipo{{$tipoop->id}}" value="{{$tipoop->id}}" {{ $tipo_operacionx == $tipoop->id ? 'checked' : ''}} onchange="seleccionaTipoOperacion('{{$tipoop->id}}');">
+								<input type="radio" name="tipo_operacion" disabled="true" id="optionsTipo{{$tipoop->id}}" value="{{$tipoop->id}}" onchange="seleccionaTipoOperacion('{{$tipoop->id}}');" {{ old('tipo_operacion') == $tipoop->id ? 'checked' : ''}}>
 							{{$tipoop->nombre}}
 							</label>
 						</div>
@@ -77,7 +77,7 @@
 					<label for="txtPreVenta">Numero Pre Venta</label>
 					<div id="txtPreVenta">
 						<div class="col-md-12">
-							<input type="text" class="form-control" id="txtpreventa2" placeholder="Numero Pre Venta" name="nro_preventa" disabled="true" value="{{old('nro_preventa')}}">
+							<input type="text" class="form-control" id="txtpreventa2" placeholder="Numero Pre Venta" name="nro_preventa" disabled="true" value="{{$operacion->NroPreventa}}">
 						</div>
 					</div>						
 				</div>
@@ -91,13 +91,13 @@
 				<div class="form-group col-md-6">						
 					<label for="txtNombre">Nombre</label>
 					<div id="txtNombre">
-						<input type="text" class="form-control" placeholder="Nombre" name="nombre" value="{{(isset($operacion->Nombres) && old('nombre') == '') ? $operacion->Nombres : old('nombre')}}">
+						<input type="text" class="form-control" placeholder="Nombre" name="nombre" value="{{(old('nombre') == '') ? $operacion->Nombres : old('nombre')}}">
 					</div>						
 				</div>
 				<div class="form-group col-md-6">						
 					<label for="txtApellido">Apellido</label>
 					<div id="txtApellido">
-						<input type="text" class="form-control" placeholder="Apellido" name="apellido" value="{{(isset($operacion->Apellido) && old('apellido') == '')  ? $operacion->Apellido : old('apellido')}}">
+						<input type="text" class="form-control" placeholder="Apellido" name="apellido" value="{{(old('apellido') == '') ? $operacion->Apellido : old('apellido')}}">
 					</div>						
 				</div>
             </div>			
@@ -106,19 +106,19 @@
 				<div class="form-group col-md-4">						
 					<label for="txtTelefono1">Telefono 1</label>
 					<div id="txtTelefono1">
-						<input type="text" class="form-control" placeholder="Numero" name="telefono1" value="{{(isset($operacion->Telefonos1) && old('telefono1') == '')  ? $operacion->Telefonos1 : old('telefono1')}}">
+						<input type="text" class="form-control" placeholder="Numero" name="telefono1" value="{{(old('telefono1') == '')  ? $operacion->Telefonos1 : old('telefono1')}}">
 					</div>						
 				</div>
 				<div class="form-group col-md-4">						
 					<label for="txtTelefono2">Telefono 2</label>
 					<div id="txtTelefono2">
-						<input type="text" class="form-control" placeholder="Numero" name="telefono2" value="{{(isset($operacion->Telefonos2) && old('telefono2') == '')  ? $operacion->Telefonos2 : old('telefono2')}}">
+						<input type="text" class="form-control" placeholder="Numero" name="telefono2" value="{{(old('telefono2') == '')  ? $operacion->Telefonos2 : old('telefono2')}}">
 					</div>						
 				</div>
 				<div class="form-group col-md-4">						
 					<label for="txtTelefono3">Telefono 3</label>
 					<div id="txtTelefono3">
-						<input type="text" class="form-control" placeholder="Numero" name="telefono3" value="{{(isset($operacion->Telefonos3) && old('telefono3') == '') ? $operacion->Telefonos3 : old('telefono3')}}">
+						<input type="text" class="form-control" placeholder="Numero" name="telefono3" value="{{(old('telefono3') == '') ? $operacion->Telefonos3 : old('telefono3')}}">
 					</div>						
 				</div>
             </div>
@@ -127,7 +127,7 @@
 				<div class="form-group col-md-6">						
 					<label for="txtMail">E-Mail</label>
 					<div id="txtMail">
-						<input type="mail" class="form-control" placeholder="email" name="email" value="{{(isset($operacion->Email) && old('email') == '') ? $operacion->Email : old('email')}}">
+						<input type="mail" class="form-control" placeholder="email" name="email" value="{{(old('email') == '') ? $operacion->Email : old('email')}}">
 					</div>						
 				</div>
 
@@ -172,13 +172,13 @@
 				<div class="form-group col-md-6">						
 					<label for="txtChasis">Chasis</label>
 					<div id="txtChasis">
-						<input type="text" class="form-control" placeholder="Chasis" name="chasis" value="{{old('chasis')}}">
+						<input type="text" class="form-control" placeholder="Chasis" name="chasis" value="{{(old('chasis') == '') ? $operacion->Chasis : old('chasis')}}">
 					</div>						
 				</div>
 				<div class="form-group col-md-6">						
 					<label for="txtVin">VIN</label>
 					<div id="txtVin">
-						<input type="text" class="form-control" placeholder="VIN" name="vin" value="{{old('vin')}}">
+						<input type="text" class="form-control" placeholder="VIN" name="vin" value="{{(old('vin') == '') ? $operacion->VIN : old('vin')}}">
 					</div>						
 				</div>
 			</div>
@@ -187,13 +187,13 @@
 				<div class="form-group col-md-6">						
 					<label for="txtModelo">Modelo</label>
 					<div id="txtModelo">
-						<input type="text" class="form-control" placeholder="Modelo" name="modelo" value="{{(isset($operacion->Modelo) && old('modelo') == '') ? $operacion->Modelo : old('modelo')}}">
+						<input type="text" class="form-control" placeholder="Modelo" name="modelo" value="{{(old('modelo') == '') ? $operacion->Modelo : old('modelo')}}">
 					</div>						
 				</div>
 				<div class="form-group col-md-6">						
 					<label for="txtColor">Color</label>
 					<div id="txtColor">
-						<input type="text" class="form-control" placeholder="Color" name="color" value="{{old('color')}}">
+						<input type="text" class="form-control" placeholder="Color" name="color" value="{{(old('color') == '') ? $operacion->Color : old('color')}}">
 					</div>						
 				</div>
 			</div>
@@ -278,4 +278,26 @@
 
 </div>
 
+@endsection
+
+@section('extras_js')
+<script>
+  function seleccionaTipoOperacion($tipo){
+    if ($tipo == 1) {
+      document.getElementById('txtgrupo').disabled = false;
+      document.getElementById('txtorden').disabled = false;
+      document.getElementById('txtpreventa').disabled = true;
+
+      document.getElementById('txtpreventa').value = '';
+    }
+    if ($tipo == 2){
+      document.getElementById('txtgrupo').disabled = true;
+      document.getElementById('txtorden').disabled = true;
+      document.getElementById('txtpreventa').disabled = false;
+      
+      document.getElementById('txtgrupo').value = '';
+      document.getElementById('txtorden').value = '';
+    }
+  }
+</script>
 @endsection

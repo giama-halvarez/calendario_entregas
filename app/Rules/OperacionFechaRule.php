@@ -26,8 +26,13 @@ class OperacionFechaRule implements Rule
     public function passes($attribute, $value)
     {
         //CHEQUEO FECHA POSTERIOR A 48 HS
+            
+        if (auth()->user()->isAdmin() == true) {
+            return true;
+        }
+
         $fecha = \DateTime::createFromFormat('d/m/Y h:i A', $value);
-        $fecha = strtotime($fecha->format('Y-m-d H:i:s'));
+        $fecha = strtotime($fecha->format('Y-m-d H:i'));
         $fecha_actual = strtotime(now());
 
         if ((($fecha - $fecha_actual)/3600) < 48) {

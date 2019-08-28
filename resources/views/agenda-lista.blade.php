@@ -11,7 +11,7 @@
 			<div class="box-body table-responsive no-padding">
 		<table class="table table-hover">
 			<tbody>
-			<tr>
+			<tr style="background-color: #e6e6e6;">
 				<th></th>
 				<!-- <th>Id</th> -->
 				<!-- <th>Chasis</th> -->
@@ -29,9 +29,8 @@
 				<th>Fecha Entrega</th>
 				<th>Hora Entrega</th>
 				<th>Sede Entrega</th>
-				<th>Editar</th>
 				@if($estado == 'pendientes')
-				<th></th>
+				<th colspan="3" class="text-center"></th>
 				@endif
 				<!-- <th>Acciones</th> -->
 			</tr>
@@ -40,13 +39,13 @@
 				<td>
 					@switch($operacion->semaforo)
 					@case(0)
-						<span class="badge bg-green">V</span>
+						<span class="badge bg-green">B</span>
 						@break
 					@case(1)
-						<span class="badge bg-yellow">A</span>
+						<span class="badge bg-yellow">M</span>
 						@break
 					@case(2)
-						<span class="badge bg-red">R</span>
+						<span class="badge bg-red">A</span>
 						@break
 					@endswitch
 				</td>
@@ -68,19 +67,25 @@
 				<td class="text-center"><strong>{{$operacion->hora_entrega()}}
 					@if($operacion->estado == 0)
 						@switch(true)				
-						@case($operacion->alerta_entrega() > 0 && $operacion->alerta_entrega() < 3)
-							<i class="fa fa-fw fa-warning text-yellow"></i></strong>
+						@case($operacion->alerta_entrega() < 0 && $operacion->alerta_entrega() > -3)
+							<i class="fa fa-fw fa-warning text-yellow"></i>
 							@break
 						@case($operacion->alerta_entrega() > 0)
-							<i class="fa fa-fw fa-warning text-red"></i></strong>
+							<i class="fa fa-fw fa-warning text-red"></i>
 							@break
 						@endswitch
 					@endif
+					</strong>
 				</td>
 				<td>{{$operacion->sede_entrega->nombre}}</td>
-				<td class="text-center"><a class="btn btn-primary btn-sm" href="#" role="button"><i class="fa fa-pencil"></i></a></td>
 				@if($estado == 'pendientes')
-				<td class="text-center"><a class="btn btn-default btn-sm" href="#" role="button" onclick="return confirm('¿Desea pasar la operacion de {{$operacion->ApeNom()}} a entregado?')"><strong>Entregar</strong></a></td>
+				<td class="text-center">
+		            <a href="{{route('agenda_mostrar', $operacion)}}" title="Editar Operación" role="button" class="btn btn-success btn-sm"><i class="fa fa-pencil"></i></a>
+				</td>
+				<td class="text-center">
+		            <a href="{{route('agenda_mostrar_entrega', $operacion)}}" title="Editar Sede y Fecha de Entrega" role="button" class="btn btn-primary btn-sm"><i class="fa fa-calendar"></i></a>
+				</td>
+				<td class="text-center"><a class="btn btn-default btn-sm" href="#" title="Marcar como Entregado" role="button" data-toggle="modal" data-target="#modal-{{$operacion->id}}"><strong>Entregar</strong></a></td>
 				@endif
 			</tr>
 			@endforeach
@@ -91,5 +96,41 @@
 	</div>
 
 </div>
+
+
+	@if($estado == 'pendientes')
+	@foreach($operaciones as $operacion)
+	
+    <div class="modal fade" id="modal-{{$operacion->id}}">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Confirmación de la operación</h4>
+          </div>
+          <div class="modal-body">
+            <p>¿Seguro desea cambiar el estado de {{$operacion->ApeNom()}} a Entregado?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+            <form action="{{route('agenda_entregar')}}" method="POST">
+            	@csrf
+            	<input type="hidden" name="_method" value="PUT">
+            	<input type="hidden" name="operacion_id" value="{{$operacion->id}}">
+            	<input type="hidden" name="entregado" value="1">
+            	<input type="submit" class="btn btn-primary" value="Guardar Estado">
+            </form>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+	@endforeach
+	@endif
+
 
 @endsection

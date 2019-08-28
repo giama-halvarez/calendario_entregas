@@ -17,17 +17,30 @@ Route::get('/loguear', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/inicio', function(){
-	return view('layouts.inicio');
-	});
+Auth::routes(['register' => false]);
 
-Route::get('/agenda/ver/{estado}', 'OperacionesController@index')->where('estado', 'pendientes|entregados');
-Route::get('/agenda/crear', 'OperacionesController@create')->name('agenda_crear');
-Route::get('/agenda/modificar', 'OperacionesController@show')->name('agenda_modificar');
-Route::post('/agenda', 'OperacionesController@store')->name('agenda_guardar');
+Route::group(['middleware' => ['auth']], function(){
 
-Route::get('/agenda/recuperar', 'OperacionesController@mostrar_consulta')->name('agenda_recuperar');
-Route::get('/agenda/crear_desde_consulta', 'Operaciones_PA_Controller@index')->name('crear_desde_consulta');
-Route::post('/agenda/guardar_desde_consulta', 'OperacionesController@store_desde_consulta')->name('guardar_desde_consulta');
+	Route::get('/', function(){return redirect('/agenda/ver/pendientes');});
+
+	Route::get('/home', 'HomeController@index')->name('home');
+
+	Route::get('/agenda', 'OperacionesController@index')->where('estado', 'pendientes|entregados');
+
+	Route::get('/agenda/ver/{estado}', 'OperacionesController@index')->where('estado', 'pendientes|entregados');
+
+	Route::get('/agenda/crear', 'OperacionesController@create')->name('agenda_crear');
+	Route::post('/agenda', 'OperacionesController@store')->name('agenda_guardar');
+	Route::get('/agenda/{operacion}/editar', 'OperacionesController@edit')->name('agenda_mostrar');
+	Route::put('/agenda/modificar', 'OperacionesController@update')->name('agenda_modificar');
+	Route::get('/agenda/{operacion}/entrega/editar', 'OperacionesController@edit_entrega')->name('agenda_mostrar_entrega');
+	Route::put('/agenda/{operacion}/entrega', 'OperacionesController@update_datos_entrega')->name('agenda_modificar_entrega');
+
+	Route::put('/agenda/entregar', 'OperacionesController@update_entrega')->name('agenda_entregar');
+
+	Route::get('/agenda/recuperar', 'OperacionesController@mostrar_consulta')->name('agenda_recuperar');
+	Route::get('/agenda/crear_desde_consulta', 'Operaciones_PA_Controller@index')->name('crear_desde_consulta');
+	Route::post('/agenda/guardar_desde_consulta', 'OperacionesController@store_desde_consulta')->name('guardar_desde_consulta');
+
+});
 

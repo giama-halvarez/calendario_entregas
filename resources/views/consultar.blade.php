@@ -32,7 +32,7 @@
 					<div class="col-md-4">
 						<div class="radio">
 							<label>
-								<input type="radio" name="marca_id" id="optionsMarca{{$marca->id}}" value="{{$marca->id}}" {{ old('optionsMarca') == $marca->id ? 'checked' : ''}}>
+								<input type="radio" name="marca_id" id="optionsMarca{{$marca->id}}" value="{{$marca->id}}" {{ old('marca_id') == $marca->id ? 'checked' : ''}}>
 							{{$marca->nombre}}
 							</label>
 						</div>
@@ -48,7 +48,7 @@
 					<div class="col-md-4">
 						<div class="radio">
 							<label>
-								<input type="radio" name="tipo_operacion" id="optionsTipo{{$tipoop->id}}" value="{{$tipoop->id}}" onchange="seleccionaTipoOperacion('{{$tipoop->id}}');">
+								<input type="radio" name="tipo_operacion" id="optionsTipo{{$tipoop->id}}" value="{{$tipoop->id}}" onchange="seleccionaTipoOperacion('{{$tipoop->id}}');" {{ old('tipo_operacion') == $tipoop->id ? 'checked' : ''}}>
 							{{$tipoop->nombre}}
 							</label>
 						</div>
@@ -98,4 +98,26 @@
 
 </div>
 
+@endsection
+
+@section('extras_js')
+<script>
+  function seleccionaTipoOperacion($tipo){
+    if ($tipo == 1) {
+      document.getElementById('txtgrupo').disabled = false;
+      document.getElementById('txtorden').disabled = false;
+      document.getElementById('txtpreventa').disabled = true;
+
+      document.getElementById('txtpreventa').value = '';
+    }
+    if ($tipo == 2){
+      document.getElementById('txtgrupo').disabled = true;
+      document.getElementById('txtorden').disabled = true;
+      document.getElementById('txtpreventa').disabled = false;
+      
+      document.getElementById('txtgrupo').value = '';
+      document.getElementById('txtorden').value = '';
+    }
+  }
+</script>
 @endsection

@@ -7,12 +7,13 @@
       <!-- general form elements -->
       <div class="box box-primary">
         <div class="box-header with-border">
-          <h3 class="box-title">Nueva Entrega</h3>
+          <h3 class="box-title">Modificación de Datos</h3>
         </div>
         <!-- /.box-header -->
         <!-- form start -->
-        <form role="form" method="POST" action="{{route('agenda_guardar')}}">
+        <form role="form" method="POST" action="{{route('agenda_modificar')}}">
         	@csrf
+            <input type="hidden" name="_method" value="PUT">
         	@if($errors->any())
         	<div class="alert alert-danger alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -23,7 +24,9 @@
         		</ul>
              </div>
         	@endif
-          <div class="box-body">			
+          <div class="box-body">
+
+          	<input type="hidden" name="id" value="{{$operacion->id}}">
 
           	<div class="form-group col-md-6">
           		<label for="radioMarca">Marca</label>
@@ -32,7 +35,7 @@
 					<div class="col-md-4">
 						<div class="radio">
 							<label>
-								<input type="radio" name="marca_id" id="optionsMarca{{$marca->id}}" value="{{$marca->id}}" {{ old('marca_id') == $marca->id ? 'checked' : ''}}>
+								<input type="radio" name="marca_id" id="optionsMarca{{$marca->id}}" value="{{$marca->id}}" {{$operacion->marca_id == $marca->id ? 'checked' : ''}} disabled>
 							{{$marca->nombre}}
 							</label>
 						</div>
@@ -48,7 +51,7 @@
 					<div class="col-md-4">
 						<div class="radio">
 							<label>
-								<input type="radio" name="tipo_operacion" id="optionsTipo{{$tipoop->id}}" value="{{$tipoop->id}}" onchange="seleccionaTipoOperacion('{{$tipoop->id}}');" {{ old('tipo_operacion') == $tipoop->id ? 'checked' : ''}}>
+								<input type="radio" name="tipo_operacion" id="optionsTipo{{$tipoop->id}}" value="{{$tipoop->id}}" {{$operacion->tipo_operacion == $tipoop->id ? 'checked' : ''}} disabled>
 							{{$tipoop->nombre}}
 							</label>
 						</div>
@@ -63,10 +66,10 @@
 					<label for="txtGrupoOrden">Grupo y Orden</label>
 					<div id="txtGrupoOrden">
 						<div class="col-md-6">
-							<input type="text" class="form-control" id="txtgrupo" placeholder="Grupo" name="grupo" value="{{old('grupo')}}">
+							<input type="text" class="form-control" id="txtgrupo" placeholder="Grupo" name="grupo" value="{{$operacion->grupo}}" disabled>
 						</div>
 						<div class="col-md-6">
-							<input type="text" class="form-control" id="txtorden" placeholder="Orden" name="orden" value="{{old('orden')}}">
+							<input type="text" class="form-control" id="txtorden" placeholder="Orden" name="orden" value="{{$operacion->orden}}" disabled>
 						</div>
 					</div>					
 				</div>
@@ -77,7 +80,7 @@
 					<label for="txtPreVenta">Numero Pre Venta</label>
 					<div id="txtPreVenta">
 						<div class="col-md-12">
-							<input type="text" class="form-control" id="txtpreventa" placeholder="Numero Pre Venta" name="nro_preventa" value="{{old('nro_preventa')}}">
+							<input type="text" class="form-control" id="txtpreventa" placeholder="Numero Pre Venta" name="nro_preventa" value="{{$operacion->nro_preventa}}" disabled>
 						</div>
 					</div>						
 				</div>
@@ -91,13 +94,13 @@
 				<div class="form-group col-md-6">						
 					<label for="txtNombre">Nombre</label>
 					<div id="txtNombre">
-						<input type="text" class="form-control" placeholder="Nombre" name="nombre" value="{{old('nombre')}}">
+						<input type="text" class="form-control" placeholder="Nombre" name="nombre" value="{{old('nombre', $operacion->nombre)}}">
 					</div>						
 				</div>
 				<div class="form-group col-md-6">						
 					<label for="txtApellido">Apellido</label>
 					<div id="txtApellido">
-						<input type="text" class="form-control" placeholder="Apellido" name="apellido" value="{{old('apellido')}}">
+						<input type="text" class="form-control" placeholder="Apellido" name="apellido" value="{{old('apellido', $operacion->apellido)}}">
 					</div>						
 				</div>
             </div>			
@@ -106,19 +109,19 @@
 				<div class="form-group col-md-4">						
 					<label for="txtTelefono1">Telefono 1</label>
 					<div id="txtTelefono1">
-						<input type="text" class="form-control" placeholder="Numero" name="telefono1" value="{{old('telefono1')}}">
+						<input type="text" class="form-control" placeholder="Numero" name="telefono1" value="{{old('telefono1', $operacion->telefono1)}}">
 					</div>						
 				</div>
 				<div class="form-group col-md-4">						
 					<label for="txtTelefono2">Telefono 2</label>
 					<div id="txtTelefono2">
-						<input type="text" class="form-control" placeholder="Numero" name="telefono2" value="{{old('telefono2')}}">
+						<input type="text" class="form-control" placeholder="Numero" name="telefono2" value="{{old('telefono2', $operacion->telefono2)}}">
 					</div>						
 				</div>
 				<div class="form-group col-md-4">						
 					<label for="txtTelefono3">Telefono 3</label>
 					<div id="txtTelefono3">
-						<input type="text" class="form-control" placeholder="Numero" name="telefono3" value="{{old('telefono3')}}">
+						<input type="text" class="form-control" placeholder="Numero" name="telefono3" value="{{old('telefono3', $operacion->telefono3)}}">
 					</div>						
 				</div>
             </div>
@@ -127,7 +130,7 @@
 				<div class="form-group col-md-6">						
 					<label for="txtMail">E-Mail</label>
 					<div id="txtMail">
-						<input type="mail" class="form-control" placeholder="email" name="email" value="{{old('email')}}">
+						<input type="mail" class="form-control" placeholder="email" name="email" value="{{old('email', $operacion->email)}}">
 					</div>						
 				</div>
 
@@ -138,7 +141,7 @@
 						<div class="col-md-4">
 							<div class="radio">
 								<label>
-									<input type="radio" name="semaforo" id="optionSemaforo3" value="2">
+									<input type="radio" name="semaforo" id="optionSemaforo3" value="2" {{old('semaforo', $operacion->semaforo) == 2 ? 'checked' : ''}}>
 								<span class="badge bg-red" style="padding: 3px 15px;">Alta</span>
 								</label>
 							</div>
@@ -146,7 +149,7 @@
 						<div class="col-md-4">
 							<div class="radio">
 								<label>
-									<input type="radio" name="semaforo" id="optionSemaforo2" value="1" checked>
+									<input type="radio" name="semaforo" id="optionSemaforo2" value="1" {{old('semaforo', $operacion->semaforo) == 1 ? 'checked' : ''}}>
 								<span class="badge bg-yellow" style="padding: 3px 10px;">Normal</span>
 								</label>
 							</div>
@@ -154,7 +157,7 @@
 						<div class="col-md-4">
 							<div class="radio">
 								<label>
-									<input type="radio" name="semaforo" id="optionSemaforo1" value="0">
+									<input type="radio" name="semaforo" id="optionSemaforo1" value="0" {{old('semaforo', $operacion->semaforo) == 0 ? 'checked' : ''}}>
 								<span class="badge bg-green" style="padding: 3px 15px;">Baja</span>
 								</label>
 							</div>
@@ -171,13 +174,13 @@
 				<div class="form-group col-md-6">						
 					<label for="txtChasis">Chasis</label>
 					<div id="txtChasis">
-						<input type="text" class="form-control" placeholder="Chasis" name="chasis" value="{{old('chasis')}}">
+						<input type="text" class="form-control" placeholder="Chasis" name="chasis" value="{{old('chasis', $operacion->chasis)}}">
 					</div>						
 				</div>
 				<div class="form-group col-md-6">						
 					<label for="txtVin">VIN</label>
 					<div id="txtVin">
-						<input type="text" class="form-control" placeholder="VIN" name="vin" value="{{old('vin')}}">
+						<input type="text" class="form-control" placeholder="VIN" name="vin" value="{{old('vin', $operacion->vin)}}">
 					</div>						
 				</div>
 			</div>
@@ -186,13 +189,13 @@
 				<div class="form-group col-md-6">						
 					<label for="txtModelo">Modelo</label>
 					<div id="txtModelo">
-						<input type="text" class="form-control" placeholder="Modelo" name="modelo" value="{{old('modelo')}}">
+						<input type="text" class="form-control" placeholder="Modelo" name="modelo" value="{{old('modelo', $operacion->modelo)}}">
 					</div>						
 				</div>
 				<div class="form-group col-md-6">						
 					<label for="txtColor">Color</label>
 					<div id="txtColor">
-						<input type="text" class="form-control" placeholder="Color" name="color" value="{{old('color')}}">
+						<input type="text" class="form-control" placeholder="Color" name="color" value="{{old('color', $operacion->color)}}">
 					</div>						
 				</div>
 			</div>
@@ -205,9 +208,13 @@
 				<div class="form-group col-md-6">
 					<label for="txtSedeEntrega">Sede de Entrega</label>
 					<div id="txtSedeEntrega">
-						<select class="form-control" name="sede_entrega">
+						<select class="form-control" name="sede_entrega" disabled>
 							@foreach($sedes_entrega as $sede)
+							@if($operacion->sede_entrega_id == $sede->id)
+							<option value="{{$sede->id}}" selected>{{$sede->nombre}}</option>
+							@else
 							<option value="{{$sede->id}}">{{$sede->nombre}}</option>
+							@endif
 							@endforeach
 						</select>
 					</div>						
@@ -220,7 +227,7 @@
 			                  <div class="input-group-addon">
 			                    <i class="fa fa-calendar"></i>
 			                  </div>
-			                  <input type="text" class="form-control pull-right" id="datepicker" name="fecha_entrega" onchange="completaFechas();" value="{{old('fecha_entrega')}}">
+			                  <input type="text" class="form-control pull-right" id="datepicker" name="fecha_entrega" value="{{$operacion->fecha_entrega('d/m/Y')}}" disabled>
 			                </div>
 						</div>
 
@@ -231,7 +238,7 @@
 								    <div class="input-group-addon">
 								      <i class="fa fa-clock-o"></i>
 								    </div>
-								    <input type="text" class="form-control timepicker" id="hora_entrega" name="hora_entrega" onchange="completaFechas();" value="{{old('hora_entrega')}}">
+								    <input type="text" class="form-control timepicker" id="hora_entrega" name="hora_entrega" value="{{$operacion->hora_entrega('G:i A')}}" disabled>
 								  </div>
 								  <!-- /.input group -->
 								</div>
@@ -241,10 +248,6 @@
 
 					</div>					
 				</div>
-
-				<input type="hidden" id="fecha_calendario_entrega" name="fecha_calendario_entrega" value="">
-
-				<input type="hidden" id="estado" name="estado" value="0">
 
 			</div>
 
@@ -256,10 +259,10 @@
               @foreach($accesorios as $accesorio)
               <div class="col-md-3 col-xs-6">
               <label>
-	              <input type="checkbox" class="flat-red" name="acc[{{$accesorio->id}}]">
+	              <input type="checkbox" class="flat-red" name="acc[{{$accesorio->id}}]" {{($accesorio->encuentraAccesorio($operacion_accesorios)) ? 'checked' : ''}}>
 				  {{$accesorio->nombre}}
 	           </label>
-              </div>	
+              </div>
 		  	  @endforeach
           </div>
 
@@ -280,23 +283,11 @@
 @endsection
 
 @section('extras_js')
-<script>
+<script>	
   function seleccionaTipoOperacion($tipo){
-    if ($tipo == 1) {
-      document.getElementById('txtgrupo').disabled = false;
-      document.getElementById('txtorden').disabled = false;
-      document.getElementById('txtpreventa').disabled = true;
-
-      document.getElementById('txtpreventa').value = '';
-    }
-    if ($tipo == 2){
       document.getElementById('txtgrupo').disabled = true;
       document.getElementById('txtorden').disabled = true;
-      document.getElementById('txtpreventa').disabled = false;
-      
-      document.getElementById('txtgrupo').value = '';
-      document.getElementById('txtorden').value = '';
-    }
+      document.getElementById('txtpreventa').disabled = true;
   }
 </script>
 @endsection
