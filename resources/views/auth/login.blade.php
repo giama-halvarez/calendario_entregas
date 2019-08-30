@@ -27,7 +27,7 @@
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body class="hold-transition login-page" style="background-color: #5082d4;">
+<body class="hold-transition login-page" style="background-color: #003580;">
 <div class="login-box">
   <div class="login-logo" style="color: #fff">
     <h1>Calendario Entregas</h1>

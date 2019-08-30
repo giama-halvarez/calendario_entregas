@@ -11,15 +11,12 @@
 |
 */
 
-Route::get('/loguear', function () {
-    return view('login');
-});
 
 Auth::routes();
 
-Auth::routes(['register' => false]);
 
 Route::group(['middleware' => ['auth']], function(){
+
 
 	Route::get('/', function(){return redirect('/agenda/ver/pendientes');});
 
@@ -41,6 +38,8 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get('/agenda/recuperar', 'OperacionesController@mostrar_consulta')->name('agenda_recuperar');
 	Route::get('/agenda/crear_desde_consulta', 'Operaciones_PA_Controller@index')->name('crear_desde_consulta');
 	Route::post('/agenda/guardar_desde_consulta', 'OperacionesController@store_desde_consulta')->name('guardar_desde_consulta');
+
+	Route::put('/agenda/{id}/update_img','UserController@update_imagen')->name('cliente_update_imagen');
 
 });
 

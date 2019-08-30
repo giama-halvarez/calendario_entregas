@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Operacion;
-use App\Marca;
-use App\TipoOperacion;
-use App\SedeEntrega;
 use App\Accesorio;
-use App\OperacionAccesorio;
-use Illuminate\Support\Facades\DB;
+use App\Http\Requests\EntregaUpdateRequest;
 use App\Http\Requests\OperacionRequest;
 use App\Http\Requests\OperacionUpdateRequest;
-use App\Http\Requests\EntregaUpdateRequest;
+use App\Mail\MessageAltaOperacion;
+use App\Marca;
+use App\Operacion;
+use App\OperacionAccesorio;
+use App\SedeEntrega;
+use App\TipoOperacion;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class OperacionesController extends Controller
 {
@@ -102,6 +104,8 @@ class OperacionesController extends Controller
             $op_acc->save();
         }
 
+        Mail::to($op->email)->send(new MessageAltaOperacion($op->email, $op));
+
         return redirect('/agenda/ver/pendientes');
         
     }
@@ -144,6 +148,8 @@ class OperacionesController extends Controller
 
             $op_acc->save();
         }
+
+        Mail::to($op->email)->send(new MessageAltaOperacion($op->email, $op));
 
         return redirect('/agenda/ver/pendientes');
         
@@ -252,7 +258,7 @@ class OperacionesController extends Controller
             $op_acc->accesorio_id = $key;
 
             $op_acc->save();
-        }
+        }        
 
         return redirect('/agenda/ver/pendientes');
     }
@@ -275,6 +281,8 @@ class OperacionesController extends Controller
         ];
 
         $operacion->update($datos);
+
+        Mail::to($operacion->email)->send(new MessageAltaOperacion($operacion->email, $operacion));
 
         return redirect('/agenda/ver/pendientes'); 
     }

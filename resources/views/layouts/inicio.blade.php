@@ -31,6 +31,17 @@
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="{{asset('assets/dist/css/skins/_all-skins.min.css')}}">
 
+  <style type="text/css">
+    .avatar-edit { 
+      opacity: 1; 
+    } 
+
+    .avatar-edit:hover { 
+      opacity: 0.8;
+      cursor: pointer;
+    }
+
+  </style>
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -79,14 +90,18 @@
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="{{asset('assets/dist/img/user2-160x160.jpg')}}" class="img-circle" alt="User Image">
-
+                <img src="{{asset('storage/img/' . auth()->user()->imagen)}}" class="img-circle avatar-edit" alt="User Image" data-toggle="modal" data-target="#modal-user-img">
                 <p>
                   {{auth()->user()->name}}
                 </p>
               </li>
               <!-- Menu Footer-->
               <li class="user-footer">
+                @if(auth()->user()->rol == 10)
+                <div class="pull-left">
+                  <a href="{{ route('register') }}" class="btn btn-default btn-flat">Nuevo Usuario</a>
+                </div>
+                @endif
                 <div class="pull-right">
                     <form action="{{route('logout')}}" method="POST">
                         <button class="btn btn-default btn-flat">Cerrar sesión
@@ -103,11 +118,6 @@
   </header>
 
 
-
-
-
-
-
   <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
@@ -115,10 +125,10 @@
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="{{asset('assets/dist/img/user2-160x160.jpg')}}" class="img-circle" alt="User Image">
+          <img src="{{asset('storage/img/' . auth()->user()->imagen)}}" class="img-circle" alt="User Image" style="height: 45px; width: 45px;">
         </div>
         <div class="pull-left info">
-          <p>Hernan</p>
+          <p style="padding-top: 13px;">{{auth()->user()->name}}</p>
         </div>
       </div>
       <!-- sidebar menu: : style can be found in sidebar.less -->
@@ -146,6 +156,37 @@
     </section>
     <!-- /.content -->
   </div>
+
+
+
+    <div class="modal fade" id="modal-user-img">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Cambiar Imagen</h4>
+          </div>
+          <form action="{{route('cliente_update_imagen', auth()->user()->id)}}" method="POST" enctype="multipart/form-data">
+          @csrf @method('PUT')
+            <div class="modal-body">
+
+              <input type="file" name="imagen" class="form-control">
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                <input type="submit" class="btn btn-primary" value="Cambiar imagen">
+            </div>
+          </form>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+
   <!-- /.content-wrapper -->
   <footer class="main-footer">
     Copyright &copy; 2019 <strong>Sistemas Giama.</strong> Todos los derechos reservados.

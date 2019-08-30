@@ -16,6 +16,7 @@ class CreateSedesEntregaTable extends Migration
         Schema::create('sedes_entrega', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('nombre')->unique();
+            $table->string('direccion', 100);
             $table->timestamps();
         });
     }

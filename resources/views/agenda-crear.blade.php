@@ -257,7 +257,7 @@
               <div class="col-md-3 col-xs-6">
               <label>
 	              <input type="checkbox" class="flat-red" name="acc[{{$accesorio->id}}]">
-				  {{$accesorio->nombre}}
+				  <span style="font-size: 12px;">{{$accesorio->nombre}}</span>
 	           </label>
               </div>	
 		  	  @endforeach
