@@ -27,10 +27,10 @@
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body class="hold-transition register-page">
+<body class="hold-transition register-page" style="background-color: #f5f5f5;">
 <div class="register-box">
   <div class="register-logo">
-    <h1>Calendario Entregas</h1>
+    Calendario Entregas
   </div>
 
   <div class="register-box-body">

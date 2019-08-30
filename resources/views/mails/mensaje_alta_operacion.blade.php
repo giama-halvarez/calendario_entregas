@@ -448,7 +448,7 @@
                   <tr>
                     <td class="content-cell">
                       <div class="f-fallback">
-                        <h1>Estimado {{$msg->ApeNom()}}!</h1>
+                        <h1>Estimado {{$msg->ApeNom()}}</h1>
                         <p>Se ha establecido una nueva fecha de entrega</p>
                         <p>Los datos de la entrega son:</p>
                         <table class="attributes" width="100%" cellpadding="0" cellspacing="0" role="presentation">
