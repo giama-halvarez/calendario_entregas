@@ -104,7 +104,7 @@ class OperacionesController extends Controller
             $op_acc->save();
         }
 
-        Mail::to($op->email)->send(new MessageAltaOperacion($op->email, $op));
+        Mail::to($op->email)->send(new MessageAltaOperacion(env('MAIL_FROM_ADDRESS'), $op));
 
         return redirect('/agenda/ver/pendientes');
         
@@ -149,7 +149,7 @@ class OperacionesController extends Controller
             $op_acc->save();
         }
 
-        Mail::to($op->email)->send(new MessageAltaOperacion($op->email, $op));
+        Mail::to($op->email)->send(new MessageAltaOperacion(env('MAIL_FROM_ADDRESS'), $op));
 
         return redirect('/agenda/ver/pendientes');
         
@@ -282,7 +282,7 @@ class OperacionesController extends Controller
 
         $operacion->update($datos);
 
-        Mail::to($operacion->email)->send(new MessageAltaOperacion($operacion->email, $operacion));
+        Mail::to($operacion->email)->send(new MessageAltaOperacion(env('MAIL_FROM_ADDRESS'), $operacion));
 
         return redirect('/agenda/ver/pendientes'); 
     }
