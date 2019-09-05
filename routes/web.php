@@ -41,5 +41,7 @@ Route::group(['middleware' => ['auth']], function(){
 
 	Route::put('/agenda/{id}/update_img','UserController@update_imagen')->name('cliente_update_imagen');
 
+	Route::resource('accesorios', 'AccesorioController');
+
 });
 

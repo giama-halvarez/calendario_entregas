@@ -137,6 +137,10 @@
         <li><a href="{{URL('agenda/ver/pendientes')}}"><i class="fa fa-calendar text-blue"></i> <span>Ver Entregas pactadas</span></a></li>
         <li><a href="{{URL('agenda/ver/entregados')}}"><i class="fa fa-calendar-check-o text-green"></i> <span>Ver Entregados</span></a></li>
         <li><a href="{{route('agenda_crear')}}"><i class="fa fa-plus-square text-yellow"></i> <span>Nueva Entrega</span></a></li>
+        @if(auth()->user()->rol >= 9)
+        <li><a href="{{route('accesorios.index')}}"><i class="fa fa-wrench text-yellow"></i> <span>Accesorios</span></a>
+        </li>
+        @endif
         <li><a href="{{route('agenda_recuperar')}}"><i class="fa fa-database text-yellow"></i> <span>Recuperar Datos</span></a></li>
       </ul>
     </section>

@@ -435,9 +435,7 @@
           <table class="email-content" width="100%" cellpadding="0" cellspacing="0" role="presentation">
             <tr>
               <td class="email-masthead">
-                <a href="https://www.giamafiat.com.ar" class="f-fallback email-masthead_name">
                 Grupo Giama
-              </a>
               </td>
             </tr>
             <!-- Email Body -->
