@@ -14,15 +14,10 @@ class AccesorioController extends Controller
      */
     public function index()
     {
-        //
-        if(auth()->user()->rol >= 9){
-            $accesorios = Accesorio::where('activo','=',1)->orderBy('nombre')->get();
+        $accesorios = Accesorio::where('activo','=',1)->orderBy('nombre')->get();
 
-            return view('accesorios', compact('accesorios'));            
-        }
-        else{
-            return redirect('/agenda/ver/pendientes');
-        }
+        return view('accesorios', compact('accesorios'));            
+
     }
 
     /**

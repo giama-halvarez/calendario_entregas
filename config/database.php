@@ -144,6 +144,19 @@ return [
             'prefix_indexes' => true,
         ],
 
+        'sqlsrv_cg_test' => [
+            'driver' => 'sqlsrv',
+            'url' => env('DATABASE_URL'),
+            'host' => '192.168.0.98',
+            'port' => '1433',
+            'database' => 'Cargroup',
+            'username' => 'halvarez',
+            'password' => 'juan1720',
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+        ],
+
     ],
 
     /*
