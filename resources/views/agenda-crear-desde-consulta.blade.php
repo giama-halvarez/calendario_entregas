@@ -72,7 +72,7 @@
 						</div>
 						<div class="col-md-6">
 							@if($tipo_operacionx == 1)
-          					<input type="hidden" name="Orden" value="{{$operacion->Orden}}">
+          					<input type="hidden" name="orden" value="{{$operacion->Orden}}">
           					@endif
 							<input type="text" class="form-control" id="txtorden2" placeholder="Orden" name="orden" disabled="true" value="{{$operacion->Orden}}">
 						</div>
