@@ -96,14 +96,17 @@ class OperacionesController extends Controller
         $op->save();
 
         $last_id = DB::getPDO()->lastInsertId();
-        
-        foreach ($request->acc as $key => $value) {
-            $op_acc = new OperacionAccesorio;
-            $op_acc->operacion_id = $last_id;
-            $op_acc->accesorio_id = $key;
 
-            $op_acc->save();
-        }
+
+        if($request->exists('acc') == true){
+            foreach ($request->acc as $key => $value) {
+                $op_acc = new OperacionAccesorio;
+                $op_acc->operacion_id = $last_id;
+                $op_acc->accesorio_id = $key;
+
+                $op_acc->save();
+            }
+        }    
 
         Mail::to($op->email)->send(new MessageAltaOperacion(env('MAIL_FROM_ADDRESS'), $op));
 
@@ -143,13 +146,16 @@ class OperacionesController extends Controller
 
         $last_id = DB::getPDO()->lastInsertId();
         
-        foreach ($request->acc as $key => $value) {
-            $op_acc = new OperacionAccesorio;
-            $op_acc->operacion_id = $last_id;
-            $op_acc->accesorio_id = $key;
 
-            $op_acc->save();
-        }
+        if($request->exists('acc') == true){
+            foreach ($request->acc as $key => $value) {
+                $op_acc = new OperacionAccesorio;
+                $op_acc->operacion_id = $last_id;
+                $op_acc->accesorio_id = $key;
+
+                $op_acc->save();
+            }
+        }    
 
         Mail::to($op->email)->send(new MessageAltaOperacion(env('MAIL_FROM_ADDRESS'), $op));
 
@@ -252,16 +258,18 @@ class OperacionesController extends Controller
 
         $operacion->save();
 
-        $operacion_accesorios = OperacionAccesorio::where('operacion_id','=',$operacion->id)->delete();
-    
-        
-        foreach ($request->acc as $key => $value) {
-            $op_acc = new OperacionAccesorio;
-            $op_acc->operacion_id = $request->id;
-            $op_acc->accesorio_id = $key;
 
-            $op_acc->save();
-        }        
+        $operacion_accesorios = OperacionAccesorio::where('operacion_id','=',$operacion->id)->delete();
+            
+        if($request->exists('acc') == true){
+            foreach ($request->acc as $key => $value) {
+                $op_acc = new OperacionAccesorio;
+                $op_acc->operacion_id = $request->id;
+                $op_acc->accesorio_id = $key;
+
+                $op_acc->save();
+            }   
+        }     
 
         return redirect('/agenda/ver/pendientes');
     }

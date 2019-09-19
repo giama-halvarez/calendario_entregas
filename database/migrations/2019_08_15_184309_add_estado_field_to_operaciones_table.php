@@ -15,7 +15,8 @@ class AddEstadoFieldToOperacionesTable extends Migration
     {
         Schema::table('operaciones', function (Blueprint $table) {
             //
-            $table->unsignedInteger('estado')->default(0)->after('sede_entrega_id'); //0=PENDIENTE,1=ENTREGADO
+            $table->text('otros_accesorios')->nullable()->after('sede_entrega_id');
+            $table->unsignedInteger('estado')->default(0)->after('otros_accesorios'); //0=PENDIENTE,1=ENTREGADO
         });
     }
 

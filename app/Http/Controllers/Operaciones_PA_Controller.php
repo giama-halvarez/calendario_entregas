@@ -105,7 +105,7 @@ class Operaciones_PA_Controller extends Controller
     			}
     			elseif ($request->tipo_operacion == 2) { //CONVENCIONAL
                     
-                    $result = DB::connection('sqlsrv_cg')->select('EXEC dbo.U0_BUnidadConAccesoriosXOperacVta ?', array($request->nro_preventa));
+                    $result = DB::connection('sqlsrv_det')->select('EXEC dbo.U0_BUnidadConAccesoriosXOperacVta ?', array($request->nro_preventa));
 
                     if($result != null){
                         $convencional = $result[0];

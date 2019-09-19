@@ -109,7 +109,7 @@
 			                  <div class="input-group-addon">
 			                    <i class="fa fa-calendar"></i>
 			                  </div>
-			                  <input type="text" class="form-control pull-right" id="datepicker" name="fecha_entrega" onchange="completaFechas();" value="{{old('fecha_entrega', $operacion->fecha_entrega('d/m/Y'))}}">
+			                  <input type="text" class="form-control pull-right" id="datepicker" name="fecha_entrega" onchange="completaFechas();" value="{{old('fecha_entrega', $operacion->fecha_entrega('d/m/Y'))}}" autocomplete="off">
 			                </div>
 						</div>
 
