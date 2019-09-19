@@ -29,6 +29,7 @@ class Operacion extends Model
                             'semaforo',
                             'fecha_calendario_entrega',
                             'sede_entrega_id',
+                            'otros_accesorios',
                             'estado',
                             ];
 

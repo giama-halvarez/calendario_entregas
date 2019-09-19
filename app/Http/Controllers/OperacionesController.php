@@ -90,6 +90,7 @@ class OperacionesController extends Controller
         $op->semaforo = $request->semaforo;
         $op->fecha_calendario_entrega = $fecha;
         $op->sede_entrega_id = $request->sede_entrega;
+        $op->otros_accesorios = $request->otros_accesorios;
         $op->estado = $request->estado;
 
         $op->save();
@@ -135,6 +136,7 @@ class OperacionesController extends Controller
         $op->semaforo = $request->semaforo;
         $op->fecha_calendario_entrega = $fecha;
         $op->sede_entrega_id = $request->sede_entrega;
+        $op->otros_accesorios = $request->otros_accesorios;
         $op->estado = $request->estado;
 
         $op->save();
@@ -246,6 +248,7 @@ class OperacionesController extends Controller
         $operacion->vin = $request->vin;
         $operacion->modelo = $request->modelo;
         $operacion->color = $request->color;
+        $operacion->otros_accesorios = $request->otros_accesorios;
 
         $operacion->save();
 

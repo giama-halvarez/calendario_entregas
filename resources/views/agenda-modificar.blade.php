@@ -266,6 +266,15 @@
 		  	  @endforeach
           </div>
 
+          	<div class="form-group col-md-12">
+				<div class="form-group col-md-12">						
+					<label for="txtAccesorios"> Otros Accesorios</label>
+					<div id="txtAccesorios">
+						<textarea class="form-control" rows="4" placeholder="Accesorios" name="otros_accesorios">{{old('otros_accesorios', html_entity_decode(implode('&#13;&#10;', (array)$operacion->otros_accesorios)))}}</textarea>
+					</div>						
+				</div>
+            </div>
+
 		  </div>
 
           <div class="box-footer">

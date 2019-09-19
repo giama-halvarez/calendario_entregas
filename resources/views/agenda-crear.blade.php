@@ -252,16 +252,25 @@
 			<h4>Accesorios</h4>
 			<hr class="hr-primary">	
 
-          <div class="form-group col-md-12">
-              @foreach($accesorios as $accesorio)
-              <div class="col-md-3 col-xs-6">
-              <label>
-	              <input type="checkbox" class="flat-red" name="acc[{{$accesorio->id}}]">
-				  <span style="font-size: 12px;">{{$accesorio->nombre}}</span>
-	           </label>
-              </div>	
-		  	  @endforeach
-          </div>
+        	<div class="form-group col-md-12">
+				@foreach($accesorios as $accesorio)
+				<div class="col-md-3 col-xs-6">
+					<label>
+						<input type="checkbox" class="flat-red" name="acc[{{$accesorio->id}}]">
+						<span style="font-size: 12px;">{{$accesorio->nombre}}</span>
+					</label>
+				</div>	
+				@endforeach
+        	</div>
+
+          	<div class="form-group col-md-12">
+				<div class="form-group col-md-12">						
+					<label for="txtAccesorios"> Otros Accesorios</label>
+					<div id="txtAccesorios">
+						<textarea class="form-control" rows="4" placeholder="Accesorios" name="otros_accesorios">{{old('otros_accesorios')}}</textarea>
+					</div>						
+				</div>
+            </div>	
 
 		  </div>
 

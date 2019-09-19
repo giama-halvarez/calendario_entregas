@@ -35,11 +35,8 @@ class Operaciones_PA_Controller extends Controller
 						WHERE operaciones.Grupo = '$request->grupo' AND operaciones.Orden = $request->orden;");
 
                     if ($operacion != null) {
-                        foreach ($operacion as $op) {
-                            # code...
-                        }
-
                         $operacion = $operacion[0];
+                        $operacion->accesorios = array();
                     }
     				
     			}
@@ -47,17 +44,12 @@ class Operaciones_PA_Controller extends Controller
                     
                     $result = DB::connection('sqlsrv_cg')->select('EXEC dbo.U0_BUnidadConAccesoriosXOperacVta ?', array($request->nro_preventa));
 
-                    //$pdo = DB::connection('sqlsrv_cg')->getPdo();
-                    //$stmt = $pdo->query("EXEC dbo.U0_BUnidadConAccesoriosXOperacVta $request->nro_preventa");
-                    //$convencional = $stmt->fetch();
-
                     if($result != null){                        
                         $convencional = $result[0];
 
                         $convencional_apellido = '';
                         $convencional_nombre = '';
 
-                        //$array_apellido_nombre = explode (',', trim($convencional['RazonSocial']));
                         $array_apellido_nombre = explode (',', trim($convencional->RazonSocial));
 
                         if (count($array_apellido_nombre) == 2) {
@@ -68,20 +60,11 @@ class Operaciones_PA_Controller extends Controller
                             $convencional_apellido = $array_apellido_nombre[0];
                         }
 
+                        $op_accesorios = array();
 
-                        /*$operacion = (object) array('Grupo' => '', 
-                                                'Orden' => '', 
-                                                'NroPreventa' => trim($convencional['OperacionVta']), 
-                                                'Apellido' => $convencional_apellido, 
-                                                'Nombres' => $convencional_nombre, 
-                                                'Telefonos1' => trim($convencional['Telefono']), 
-                                                'Telefonos2' => '', 
-                                                'Telefonos3' => '', 
-                                                'Email' => trim($convencional['Mail']), 
-                                                'Modelo' => trim($convencional['DescripModelo']),
-                                                'Color' => trim($convencional['DescripColor']),
-                                                'Chasis' => trim($convencional['Carroceria']),
-                                                'VIN' => trim($convencional['Vin_Carroceria']));*/
+                        foreach ($result as $op) {
+                            $op_accesorios[] = trim($op->DescripAccesorio);
+                        } 
 
                         $operacion = (object) array('Grupo' => '', 
                                                 'Orden' => '', 
@@ -95,7 +78,9 @@ class Operaciones_PA_Controller extends Controller
                                                 'Modelo' => trim($convencional->DescripModelo),
                                                 'Color' => trim($convencional->DescripColor),
                                                 'Chasis' => trim($convencional->Carroceria),
-                                                'VIN' => trim($convencional->Vin_Carroceria));
+                                                'VIN' => trim($convencional->Vin_Carroceria),
+                                                'accesorios' => (object) $op_accesorios);
+
                     }
                     else{
                         $operacion = null;
@@ -114,15 +99,13 @@ class Operaciones_PA_Controller extends Controller
 
                     if ($operacion != null) {
                         $operacion = $operacion[0];
+                        $operacion->accesorios = array();
                     }
 
     			}
     			elseif ($request->tipo_operacion == 2) { //CONVENCIONAL
                     
-                    $result = DB::connection('sqlsrv_det')->select('EXEC dbo.U0_BUnidadConAccesoriosXOperacVta ?', array($request->nro_preventa));
-                    //$pdo = DB::connection('sqlsrv_det')->getPdo();
-                    //$stmt = $pdo->query("EXEC dbo.U0_BUnidadConAccesoriosXOperacVta $request->nro_preventa");
-                    //$convencional = $stmt->fetch();
+                    $result = DB::connection('sqlsrv_cg')->select('EXEC dbo.U0_BUnidadConAccesoriosXOperacVta ?', array($request->nro_preventa));
 
                     if($result != null){
                         $convencional = $result[0];
@@ -141,20 +124,11 @@ class Operaciones_PA_Controller extends Controller
                             $convencional_apellido = $array_apellido_nombre[0];
                         }
 
+                        $op_accesorios = array();
 
-                        /*$operacion = (object) array('Grupo' => '', 
-                                                'Orden' => '', 
-                                                'NroPreventa' => trim($convencional['OperacionVta']), 
-                                                'Apellido' => $convencional_apellido, 
-                                                'Nombres' => $convencional_nombre, 
-                                                'Telefonos1' => trim($convencional['Telefono']), 
-                                                'Telefonos2' => '', 
-                                                'Telefonos3' => '', 
-                                                'Email' => trim($convencional['Mail']), 
-                                                'Modelo' => trim($convencional['DescripModelo']),
-                                                'Color' => trim($convencional['DescripColor']),
-                                                'Chasis' => trim($convencional['Carroceria']),
-                                                'VIN' => trim($convencional['Vin_Carroceria']));*/
+                        foreach ($result as $op) {
+                            $op_accesorios[] = trim($op->DescripAccesorio);
+                        }
 
                         $operacion = (object) array('Grupo' => '', 
                                                 'Orden' => '', 
@@ -168,7 +142,8 @@ class Operaciones_PA_Controller extends Controller
                                                 'Modelo' => trim($convencional->DescripModelo),
                                                 'Color' => trim($convencional->DescripColor),
                                                 'Chasis' => trim($convencional->Carroceria),
-                                                'VIN' => trim($convencional->Vin_Carroceria));
+                                                'VIN' => trim($convencional->Vin_Carroceria),
+                                                'accesorios' => (object) $op_accesorios);
                     }
                     else{
                         $operacion = null;

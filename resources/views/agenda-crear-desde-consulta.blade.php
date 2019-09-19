@@ -27,6 +27,7 @@
 
           	<div class="form-group col-md-6">
           		<label for="radioMarca">Marca</label>
+          		<input type="hidden" name="marca_id" value="{{$marcax}}">
           		<div id="radioMarca">
 					@foreach($marcas as $marca)
 					<div class="col-md-4">
@@ -44,11 +45,12 @@
           	<div class="form-group col-md-6">
           		<label for="radioTipo">Tipo de Operacion</label>
           		<div id="radioTipo">
+          		<input type="hidden" name="tipo_operacion" value="{{$tipo_operacionx}}">
 					@foreach($tipos_operacion as $tipoop)
 					<div class="col-md-4">
 						<div class="radio">
 							<label>
-								<input type="radio" name="tipo_operacion" disabled="true" id="optionsTipo{{$tipoop->id}}" value="{{$tipoop->id}}" onchange="seleccionaTipoOperacion('{{$tipoop->id}}');" {{ old('tipo_operacion') == $tipoop->id ? 'checked' : ''}}>
+								<input type="radio" name="tipo_operacion" disabled="true" id="optionsTipo{{$tipoop->id}}" value="{{$tipoop->id}}" onchange="seleccionaTipoOperacion('{{$tipoop->id}}');" {{ old('tipo_operacion', $tipo_operacionx) == $tipoop->id ? 'checked' : ''}}>
 							{{$tipoop->nombre}}
 							</label>
 						</div>
@@ -63,9 +65,15 @@
 					<label for="txtGrupoOrden">Grupo y Orden</label>
 					<div id="txtGrupoOrden">
 						<div class="col-md-6">
+							@if($tipo_operacionx == 1)
+          					<input type="hidden" name="grupo" value="{{$operacion->Grupo}}">
+          					@endif
 							<input type="text" class="form-control" id="txtgrupo2" placeholder="Grupo" name="grupo" disabled="true" value="{{$operacion->Grupo}}">
 						</div>
 						<div class="col-md-6">
+							@if($tipo_operacionx == 1)
+          					<input type="hidden" name="Orden" value="{{$operacion->Orden}}">
+          					@endif
 							<input type="text" class="form-control" id="txtorden2" placeholder="Orden" name="orden" disabled="true" value="{{$operacion->Orden}}">
 						</div>
 					</div>					
@@ -77,6 +85,9 @@
 					<label for="txtPreVenta">Numero Pre Venta</label>
 					<div id="txtPreVenta">
 						<div class="col-md-12">
+							@if($tipo_operacionx == 2)
+          					<input type="hidden" name="nro_preventa" value="{{$operacion->NroPreventa}}">
+          					@endif
 							<input type="text" class="form-control" id="txtpreventa2" placeholder="Numero Pre Venta" name="nro_preventa" disabled="true" value="{{$operacion->NroPreventa}}">
 						</div>
 					</div>						
@@ -253,16 +264,25 @@
 			<h4>Accesorios</h4>
 			<hr class="hr-primary">	
 
-          <div class="form-group col-md-12">
-              @foreach($accesorios as $accesorio)
-              <div class="col-md-3 col-xs-6">
-              <label>
-	              <input type="checkbox" class="flat-red" name="acc[{{$accesorio->id}}]">
-				  <span style="font-size: 12px;">{{$accesorio->nombre}}</span>
-	           </label>
-              </div>	
-		  	  @endforeach
-          </div>
+			<div class="form-group col-md-12">
+				@foreach($accesorios as $accesorio)
+				<div class="col-md-3 col-xs-6">
+					<label>
+						<input type="checkbox" class="flat-red" name="acc[{{$accesorio->id}}]">
+						<span style="font-size: 12px;">{{$accesorio->nombre}}</span>
+					</label>
+				</div>	
+				@endforeach
+			</div>
+
+          	<div class="form-group col-md-12">
+				<div class="form-group col-md-12">						
+					<label for="txtAccesorios"> Otros Accesorios</label>
+					<div id="txtAccesorios">
+						<textarea class="form-control" rows="4" placeholder="Accesorios" name="otros_accesorios">{{old('otros_accesorios', html_entity_decode(implode('&#13;&#10;', (array)$operacion->accesorios)))}}</textarea>
+					</div>						
+				</div>
+            </div>	
 
 		  </div>
 
