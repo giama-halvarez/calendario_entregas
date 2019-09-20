@@ -29,6 +29,7 @@
 				<th>Fecha Entrega</th>
 				<th>Hora Entrega</th>
 				<th>Sede Entrega</th>
+				<th>Usuario Alta</th>
 				@if($estado == 'pendientes')
 				<th colspan="3" class="text-center"></th>
 				@endif
@@ -78,6 +79,7 @@
 					</strong>
 				</td>
 				<td>{{$operacion->sede_entrega->nombre}}</td>
+				<th>{{$operacion->usuario_alta}}</th>
 				@if($estado == 'pendientes')
 				<td class="text-center">
 		            <a href="{{route('agenda_mostrar', $operacion)}}" title="Editar Operación" role="button" class="btn btn-success btn-sm"><i class="fa fa-pencil"></i></a>

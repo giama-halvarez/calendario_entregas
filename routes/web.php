@@ -24,7 +24,7 @@ Route::group(['middleware' => ['auth']], function(){
 
 	Route::get('/agenda', 'OperacionesController@index')->where('estado', 'pendientes|entregados');
 
-	Route::get('/agenda/ver/{estado}', 'OperacionesController@index')->where('estado', 'pendientes|entregados');
+	Route::get('/agenda/ver/{estado}/{desde?}/{hasta?}', 'OperacionesController@index')->where('estado', 'pendientes|entregados');
 
 	Route::get('/agenda/crear', 'OperacionesController@create')->name('agenda_crear');
 	Route::post('/agenda', 'OperacionesController@store')->name('agenda_guardar');

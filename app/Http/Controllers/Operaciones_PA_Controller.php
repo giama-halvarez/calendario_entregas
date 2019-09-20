@@ -29,7 +29,7 @@ class Operaciones_PA_Controller extends Controller
     		case 1: //FIAT
     			if ($request->tipo_operacion == 1) { //PLAN DE AHORRO
 
-    				$operacion = DB::connection('mysql_cg')->select("SELECT operaciones.Grupo, operaciones.Orden, '' AS NroPreventa, operaciones.Apellido, operaciones.Nombres, operaciones.Telefonos AS Telefonos1, operaciones.Telefonos2, operaciones.Telefonos3, IFNULL(eMail, IFNULL(EmailParticular, EmailLaboral)) AS Email, modelos.Nombre AS Modelo, '' AS Color, '' AS Chasis, '' AS VIN
+    				$operacion = DB::connection('mysql_cg')->select("SELECT operaciones.Grupo, operaciones.Orden, '' AS NroPreventa, operaciones.Apellido, operaciones.Nombres, operaciones.Telefonos AS Telefonos1, operaciones.Telefonos2, operaciones.Telefonos3, IFNULL(eMail, IFNULL(EmailParticular, EmailLaboral)) AS Email, modelos.Nombre AS Modelo, Color AS Color, NroChasis AS Chasis, '' AS VIN
 						FROM operaciones
 						LEFT JOIN modelos ON operaciones.Marca = modelos.Marca AND operaciones.ModeloPedido = modelos.Codigo
 						WHERE operaciones.Grupo = '$request->grupo' AND operaciones.Orden = $request->orden;");
@@ -92,7 +92,7 @@ class Operaciones_PA_Controller extends Controller
     		case 2: //JEEP
     			if ($request->tipo_operacion == 1) { //PLAN DE AHORRO
 
-                    $operacion = DB::connection('mysql_det')->select("SELECT operaciones.Grupo, operaciones.Orden, 0 AS NroPreventa, operaciones.Apellido, operaciones.Nombres, operaciones.Telefonos AS Telefonos1, operaciones.Telefonos2, operaciones.Telefonos3, IFNULL(eMail, IFNULL(EmailParticular, EmailLaboral)) AS Email, modelos.Nombre AS Modelo, '' AS Color, '' AS Chasis, '' AS VIN
+                    $operacion = DB::connection('mysql_det')->select("SELECT operaciones.Grupo, operaciones.Orden, 0 AS NroPreventa, operaciones.Apellido, operaciones.Nombres, operaciones.Telefonos AS Telefonos1, operaciones.Telefonos2, operaciones.Telefonos3, IFNULL(eMail, IFNULL(EmailParticular, EmailLaboral)) AS Email, modelos.Nombre AS Modelo, Color AS Color, NroChasis AS Chasis, '' AS VIN
                         FROM operaciones
                         LEFT JOIN modelos ON operaciones.Marca = modelos.Marca AND operaciones.ModeloPedido = modelos.Codigo
                         WHERE operaciones.Grupo = '$request->grupo' AND operaciones.Orden = $request->orden;");

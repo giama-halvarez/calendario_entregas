@@ -23,9 +23,18 @@ class OperacionesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($estado)
+    public function index($estado, $desde='', $hasta='')
     {
         //        
+        //if ($desde == '') { $desde = '01/01/2019'; }
+        //if ($hasta == '') { $hasta = date('d/m/Y'); }
+
+        //$FechaDesde = \DateTime::createFromFormat('d/m/Y', $desde);
+        //$FechaHasta = \DateTime::createFromFormat('d/m/Y', $hasta);
+
+        //dump($FechaDesde);
+        //dd($FechaHasta);
+
         switch ($estado) {
             case 'pendientes':
                 $operaciones = Operacion::where('estado','=','0')->orderBy('fecha_calendario_entrega')->get();
@@ -92,6 +101,7 @@ class OperacionesController extends Controller
         $op->sede_entrega_id = $request->sede_entrega;
         $op->otros_accesorios = $request->otros_accesorios;
         $op->estado = $request->estado;
+        $op->usuario_alta = auth()->user()->name;
 
         $op->save();
 
@@ -141,6 +151,7 @@ class OperacionesController extends Controller
         $op->sede_entrega_id = $request->sede_entrega;
         $op->otros_accesorios = $request->otros_accesorios;
         $op->estado = $request->estado;
+        $op->usuario_alta = auth()->user()->name;
 
         $op->save();
 

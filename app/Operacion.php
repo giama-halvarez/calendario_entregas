@@ -31,6 +31,7 @@ class Operacion extends Model
                             'sede_entrega_id',
                             'otros_accesorios',
                             'estado',
+                            'usuario_alta',
                             ];
 
     public function marca(){

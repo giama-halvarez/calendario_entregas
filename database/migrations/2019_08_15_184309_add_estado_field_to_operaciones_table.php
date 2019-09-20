@@ -17,6 +17,7 @@ class AddEstadoFieldToOperacionesTable extends Migration
             //
             $table->text('otros_accesorios')->nullable()->after('sede_entrega_id');
             $table->unsignedInteger('estado')->default(0)->after('otros_accesorios'); //0=PENDIENTE,1=ENTREGADO
+            $table->string('usuario_alta')->nullable()->after('estado');
         });
     }
 
