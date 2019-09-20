@@ -6,7 +6,7 @@
 	<div class="col-md-12">
 		<div class="box">
 			<div class="box-header">
-				<h3 class="box-title">{{ucfirst($estado)}}</h3>
+				<h3 class="box-title">{{ucfirst($estado)}} <span style="color:grey">({{count($operaciones)}})</span></h3>
 			</div>
 			<div class="box-body table-responsive no-padding">
 		<table class="table table-hover">
