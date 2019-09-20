@@ -27,7 +27,7 @@ class OperacionFechaRule implements Rule
     {
         //CHEQUEO FECHA POSTERIOR A 48 HS
             
-        if (auth()->user()->isAdmin() == true) {
+        if (auth()->user()->isSupervisor() == true || auth()->user()->isAdmin() == true) {
             return true;
         }
 

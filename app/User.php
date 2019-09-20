@@ -48,6 +48,13 @@ class User extends Authenticatable
         return false;
     }
 
+    public function isSupervisor(){
+        if ($this->rol == 9) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Send the password reset notification.
      *
