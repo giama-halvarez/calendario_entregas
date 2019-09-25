@@ -8,13 +8,16 @@ use App\Http\Requests\OperacionRequest;
 use App\Http\Requests\OperacionUpdateRequest;
 use App\Mail\MessageAltaOperacion;
 use App\Marca;
+use App\Observacion;
 use App\Operacion;
 use App\OperacionAccesorio;
 use App\SedeEntrega;
 use App\TipoOperacion;
+use App\Exports\OperacionesExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OperacionesController extends Controller
 {
@@ -23,33 +26,68 @@ class OperacionesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($estado, $desde='', $hasta='')
+    public function index($estado)
     {
-        //        
-        //if ($desde == '') { $desde = '01/01/2019'; }
-        //if ($hasta == '') { $hasta = date('d/m/Y'); }
+        // 
+        $FechaDesde = \DateTime::createFromFormat('Y-m-d', date('Y-m-d'));
+        $FechaHasta = \DateTime::createFromFormat('Y-m-d', date('Y-m-d'));
 
-        //$FechaDesde = \DateTime::createFromFormat('d/m/Y', $desde);
-        //$FechaHasta = \DateTime::createFromFormat('d/m/Y', $hasta);
-
-        //dump($FechaDesde);
-        //dd($FechaHasta);
 
         switch ($estado) {
             case 'pendientes':
-                $operaciones = Operacion::where('estado','=','0')->orderBy('fecha_calendario_entrega')->get();
+                date_add($FechaHasta, date_interval_create_from_date_string('30 days'));
+
+                $operaciones = Operacion::where('estado','=','0')->whereBetween('fecha_calendario_entrega', [$FechaDesde->format('Y-m-d'), $FechaHasta->format('Y-m-d')])->orderBy('fecha_calendario_entrega')->get();
                 break;
-            case 'entregados':                
-                $operaciones = Operacion::where('estado','=','1')->orderBy('fecha_calendario_entrega')->get();
+            case 'entregados':
+                date_add($FechaDesde, date_interval_create_from_date_string('-30 days'));
+
+                $operaciones = Operacion::where('estado','=','1')->whereBetween('fecha_calendario_entrega', [$FechaDesde->format('Y-m-d'), $FechaHasta->format('Y-m-d')])->orderBy('fecha_calendario_entrega')->get();
                 break;
-            default:                
+            default: 
                 $operaciones = Operacion::orderBy('fecha_calendario_entrega')->get();
                 break;
         }
+
+        $desde = $FechaDesde->format('Y-m-d');
+        $hasta = $FechaHasta->format('Y-m-d');
         
+
         //dd($operaciones->toArray());
 
-        return view('agenda-lista',compact('operaciones', 'estado'));
+        return view('agenda-lista',compact('operaciones', 'estado', 'desde', 'hasta'));
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getFechas(Request $request, $estado)
+    {
+        // 
+        $FechaDesde = \DateTime::createFromFormat('Y-m-d', $request->desde);
+        $FechaHasta = \DateTime::createFromFormat('Y-m-d', $request->hasta);
+
+
+        switch ($estado) {
+            case 'pendientes':
+                $operaciones = Operacion::where('estado','=','0')->whereBetween('fecha_calendario_entrega', [$FechaDesde->format('Y-m-d'), $FechaHasta->format('Y-m-d')])->orderBy('fecha_calendario_entrega')->get();
+                break;
+            case 'entregados':
+                $operaciones = Operacion::where('estado','=','1')->whereBetween('fecha_calendario_entrega', [$FechaDesde->format('Y-m-d'), $FechaHasta->format('Y-m-d')])->orderBy('fecha_calendario_entrega')->get();
+                break;
+            default: 
+                $operaciones = Operacion::orderBy('fecha_calendario_entrega')->get();
+                break;
+        }
+
+        $desde = $FechaDesde->format('Y-m-d');
+        $hasta = $FechaHasta->format('Y-m-d');
+        
+
+        //dd($operaciones->toArray());
+
+        return view('agenda-lista',compact('operaciones', 'estado', 'desde', 'hasta'));
     }
 
     /**
@@ -76,7 +114,7 @@ class OperacionesController extends Controller
      */
     public function store(OperacionRequest $request)
     {
-        //
+        //        
         $op = new Operacion;        
         $fecha = \DateTime::createFromFormat('d/m/Y h:i A', $request->fecha_calendario_entrega);
         $op->estado = $request->estado;
@@ -119,6 +157,11 @@ class OperacionesController extends Controller
         }    
 
         Mail::to($op->email)->send(new MessageAltaOperacion(env('MAIL_FROM_ADDRESS'), $op));
+
+        $observacion = new Observacion;
+        $observacion->operacion_id = $operacion->id;
+        $observacion->descripcion = 'Se ha enviado mail inicial de programacion de entrega';
+        $observacion->save();
 
         return redirect('/agenda/ver/pendientes');
         
@@ -169,6 +212,11 @@ class OperacionesController extends Controller
         }    
 
         Mail::to($op->email)->send(new MessageAltaOperacion(env('MAIL_FROM_ADDRESS'), $op));
+
+        $observacion = new Observacion;
+        $observacion->operacion_id = $operacion->id;
+        $observacion->descripcion = 'Se ha enviado mail inicial de programacion de entrega';
+        $observacion->save();
 
         return redirect('/agenda/ver/pendientes');
         
@@ -295,16 +343,22 @@ class OperacionesController extends Controller
     public function update_datos_entrega(Operacion $operacion, EntregaUpdateRequest $request)
     {
         //
-        $fecha_entrega = \DateTime::createFromFormat('d/m/Y h:i A', $request->fecha_calendario_entrega);
+        $fecha_entrega = \DateTime::createFromFormat('d/m/Y h: i A', $request->fecha_calendario_entrega);
         //dd($request);
         $datos = [
             "sede_entrega_id" => $request->sede_entrega,
             "fecha_calendario_entrega" => $fecha_entrega,
+            "fecha_alta_reprogramacion" => now(),
         ];
 
         $operacion->update($datos);
 
         Mail::to($operacion->email)->send(new MessageAltaOperacion(env('MAIL_FROM_ADDRESS'), $operacion));
+
+        $observacion = new Observacion;
+        $observacion->operacion_id = $operacion->id;
+        $observacion->descripcion = 'Se ha enviado mail de reprogramacion de entrega';
+        $observacion->save();
 
         return redirect('/agenda/ver/pendientes'); 
     }
@@ -337,5 +391,83 @@ class OperacionesController extends Controller
     public function destroy(Operacion $operacion)
     {
         //
+    }
+
+    public function export(Request $request) 
+    {   
+        $desde = $request->desde;
+        $hasta = $request->hasta;
+        $operaciones_array = json_decode($request->operaciones);
+
+        $listado = array();
+
+        foreach ($operaciones_array as $op) {
+            $obj = new Operacion;
+            $obj->id = $op->id;
+            $obj->chasis = $op->chasis;
+            $obj->tipo_operacion = $op->tipo_operacion;
+            $obj->nro_preventa = $op->nro_preventa;
+            $obj->grupo = $op->grupo;
+            $obj->orden = $op->orden;
+            $obj->marca_id = $op->marca_id;
+            $obj->modelo = $op->modelo;
+            $obj->color = $op->color;
+            $obj->vin = $op->vin;
+            $obj->nombre = $op->nombre;
+            $obj->apellido = $op->apellido;
+            $obj->telefono1 = $op->telefono1;
+            $obj->telefono2 = $op->telefono2;
+            $obj->telefono3 = $op->telefono3;
+            $obj->email = $op->email;
+            $obj->semaforo = $op->semaforo;
+            $obj->fecha_calendario_entrega = $op->fecha_calendario_entrega;
+            $obj->sede_entrega_id = $op->sede_entrega_id;
+            $obj->otros_accesorios = $op->otros_accesorios;
+            $obj->estado = $op->estado;
+            $obj->usuario_alta = $op->usuario_alta;
+            $obj->fecha_alta_reprogramacion = $op->fecha_alta_reprogramacion;
+            $obj->vendedor = $op->vendedor;
+
+            $oxls = new Operacion();
+            $oxls->cliente = $obj->ApeNom();
+            $oxls->nro_preventa = $obj->nro_preventa;
+            $oxls->grupo_orden = $obj->GrupoOrden();
+            $oxls->marca = $obj->marca->nombre;
+            $oxls->modelo = $obj->modelo;
+            $oxls->fecha_entrega = $obj->fecha_entrega();
+            $oxls->hora_entrega = $obj->hora_entrega();
+            $oxls->sede_entrega = $obj->sede_entrega->nombre;
+            $oxls->accesorios = $obj->accesorios_mostrar();
+            $oxls->otros_accesorios = $obj->otros_accesorios;
+            $oxls->usuario_alta = $obj->usuario_alta;
+            $oxls->fecha_alta = $obj->created_at_format('d-m-Y');
+            $oxls->fecha_reprogramacion = $obj->fecha_alta_reprogramacion_format('d-m-Y');
+
+            $listado[] = $oxls;
+        }
+
+        $operaciones = collect($listado);
+
+        $nombre_archivo = 'entregas_' . $desde . '_' . $hasta . '.xlsx';
+
+        $titulos = [
+            'cliente' => 'Cliente',
+            'nro_preventa' => 'Preventa',
+            'grupo_orden' => 'Grupo - Orden',
+            'marca' => 'Marca',
+            'modelo' => 'Modelo',
+            'fecha_entrega' => 'Fecha Entrega',
+            'hora_entrega' => 'Hora Entrega',
+            'sede_entrega' => 'Sede',
+            'accesorios' => 'Accesorios',
+            'otros_accesorios' => 'Otros Accesorios',
+            'usuario_alta' => 'Alta',
+            'fecha_alta' => 'Fecha Alta',
+            'fecha_reprogramacion' => 'Fecha de Reprogramación',
+        ];
+
+        $export = new OperacionesExport($operaciones, $titulos);
+
+        return $export->download($nombre_archivo);
     }
 }

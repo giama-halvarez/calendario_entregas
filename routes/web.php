@@ -24,7 +24,8 @@ Route::group(['middleware' => ['auth']], function(){
 
 	Route::get('/agenda', 'OperacionesController@index')->where('estado', 'pendientes|entregados');
 
-	Route::get('/agenda/ver/{estado}/{desde?}/{hasta?}', 'OperacionesController@index')->where('estado', 'pendientes|entregados');
+	Route::get('/agenda/ver/{estado}', 'OperacionesController@index')->where('estado', 'pendientes|entregados');
+	Route::post('/agenda/ver/{estado}', 'OperacionesController@getFechas')->where('estado', 'pendientes|entregados')->name('operaciones_fechas');
 
 	Route::get('/agenda/crear', 'OperacionesController@create')->name('agenda_crear');
 	Route::post('/agenda', 'OperacionesController@store')->name('agenda_guardar');
@@ -42,6 +43,8 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::put('/agenda/{id}/update_img','UserController@update_imagen')->name('cliente_update_imagen');
 
 	Route::resource('accesorios', 'AccesorioController')->middleware('roles:>=,9');
+
+	Route::post('operaciones/export/', 'OperacionesController@export')->name('export_excel');
 
 });
 

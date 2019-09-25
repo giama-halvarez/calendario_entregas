@@ -59,7 +59,7 @@
 
 
 </head>
-<body class="hold-transition skin-blue sidebar-mini" onload="inicializaComponentes();">
+<body class="hold-transition skin-blue sidebar-mini <?=$__env->yieldContent('sidebar')?>" onload="inicializaComponentes();">
 <div class="wrapper">
 
 

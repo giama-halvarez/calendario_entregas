@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\Marca;
 use App\SedeEntrega;
+use App\Observacion;
 
 class Operacion extends Model
 {
@@ -32,6 +33,8 @@ class Operacion extends Model
                             'otros_accesorios',
                             'estado',
                             'usuario_alta',
+                            'fecha_alta_reprogramacion',
+                            'vendedor',
                             ];
 
     public function marca(){
@@ -43,7 +46,11 @@ class Operacion extends Model
     }
 
     public function accesorios(){
-    	return $this->hasMany(Accesorio::class);
+    	return $this->belongsToMany(Accesorio::class, 'operaciones_accesorios');
+    }
+
+    public function observaciones(){
+        return $this->hasMany(Observacion::class);
     }
 
     public function tipo_operacion_nombre(){
@@ -100,7 +107,30 @@ class Operacion extends Model
     }
 
     public function fecha_calendario_entrega_format($formato = 'd-m-Y h:i A'){
-        return date($formato, strtotime($this->fecha_calendario_entrega));
+        if ($this->fecha_calendario_entrega) {
+            return date($formato, strtotime($this->fecha_calendario_entrega));
+        }
+        else{
+            return '';
+        }        
+    }
+
+    public function created_at_format($formato = 'd-m-Y h:i A'){
+        if ($this->created_at) {
+            return date($formato, strtotime($this->created_at));
+        }
+        else{
+            return '';
+        }        
+    }
+
+    public function fecha_alta_reprogramacion_format($formato = 'd-m-Y h:i A'){
+        if ($this->fecha_alta_reprogramacion) {
+            return date($formato, strtotime($this->fecha_alta_reprogramacion));
+        }
+        else{
+            return '';
+        }        
     }
 
     public function ApeNom(){
@@ -121,6 +151,19 @@ class Operacion extends Model
     public function alerta_entrega(){
         $resultado = $this->differenceInHours($this->fecha_calendario_entrega, now());
         return $resultado;
+    }
+
+    public function accesorios_mostrar(){
+        if (count($this->accesorios) > 0) {
+            $res = '';
+            foreach ($this->accesorios as $accesorio) {
+                $res .= $accesorio->nombre . ' // ';
+            }
+            return substr($res, 0, strlen($res)-4);
+        }
+        else{
+            return '';
+        }
     }
 
     private function differenceInHours($startdate,$enddate){
