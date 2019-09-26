@@ -159,7 +159,7 @@ class OperacionesController extends Controller
         Mail::to($op->email)->send(new MessageAltaOperacion(env('MAIL_FROM_ADDRESS'), $op));
 
         $observacion = new Observacion;
-        $observacion->operacion_id = $operacion->id;
+        $observacion->operacion_id = $op->id;
         $observacion->descripcion = 'Se ha enviado mail inicial de programacion de entrega';
         $observacion->save();
 
@@ -214,7 +214,7 @@ class OperacionesController extends Controller
         Mail::to($op->email)->send(new MessageAltaOperacion(env('MAIL_FROM_ADDRESS'), $op));
 
         $observacion = new Observacion;
-        $observacion->operacion_id = $operacion->id;
+        $observacion->operacion_id = $op->id;
         $observacion->descripcion = 'Se ha enviado mail inicial de programacion de entrega';
         $observacion->save();
 
@@ -252,14 +252,12 @@ class OperacionesController extends Controller
         //
         if ($operacion != null) {
 
-            $operacion_accesorios = OperacionAccesorio::where('operacion_id','=',$operacion->id)->get();
-
             $marcas = Marca::where('activo','=',1)->orderBy('nombre')->get();
             $sedes_entrega = SedeEntrega::where('activo','=',1)->orderBy('nombre')->get();
             $tipos_operacion = (new TipoOperacion)->get_tipos();
             $accesorios = Accesorio::where('activo','=',1)->orderBy('nombre')->get();
             
-            return view('agenda-modificar', compact('operacion', 'operacion_accesorios', 'marcas', 'sedes_entrega', 'tipos_operacion', 'accesorios'));
+            return view('agenda-modificar', compact('operacion', 'marcas', 'sedes_entrega', 'tipos_operacion', 'accesorios'));
         }
         else{
             return redirect()->back()->withErrors(['No se encontro la operación']);
@@ -276,8 +274,6 @@ class OperacionesController extends Controller
     {
         //
         if ($operacion != null) {
-
-            $operacion_accesorios = OperacionAccesorio::where('operacion_id','=',$operacion->id)->get();
 
             $marcas = Marca::where('activo','=',1)->orderBy('nombre')->get();
             $sedes_entrega = SedeEntrega::where('activo','=',1)->orderBy('nombre')->get();
@@ -434,6 +430,8 @@ class OperacionesController extends Controller
             $oxls->grupo_orden = $obj->GrupoOrden();
             $oxls->marca = $obj->marca->nombre;
             $oxls->modelo = $obj->modelo;
+            $oxls->chasis = $obj->chasis;
+            $oxls->vin = $obj->vin;
             $oxls->fecha_entrega = $obj->fecha_entrega();
             $oxls->hora_entrega = $obj->hora_entrega();
             $oxls->sede_entrega = $obj->sede_entrega->nombre;
@@ -456,6 +454,8 @@ class OperacionesController extends Controller
             'grupo_orden' => 'Grupo - Orden',
             'marca' => 'Marca',
             'modelo' => 'Modelo',
+            'chasis' => 'Chasis',
+            'vin' => 'VIN',
             'fecha_entrega' => 'Fecha Entrega',
             'hora_entrega' => 'Hora Entrega',
             'sede_entrega' => 'Sede',
