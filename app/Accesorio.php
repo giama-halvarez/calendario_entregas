@@ -16,7 +16,7 @@ class Accesorio extends Model
 
     public function encuentraAccesorio($listado){
     	foreach($listado as $op_accesorio){
-    		if ($op_accesorio->accesorio_id == $this->id) {
+    		if ($op_accesorio->id == $this->id) {
     			return true;
     		}
     	}

@@ -29,14 +29,75 @@ class Operaciones_PA_Controller extends Controller
     		case 1: //FIAT
     			if ($request->tipo_operacion == 1) { //PLAN DE AHORRO
 
-    				$operacion = DB::connection('mysql_cg')->select("SELECT operaciones.Grupo, operaciones.Orden, '' AS NroPreventa, operaciones.Apellido, operaciones.Nombres, operaciones.Telefonos AS Telefonos1, operaciones.Telefonos2, operaciones.Telefonos3, IFNULL(eMail, IFNULL(EmailParticular, EmailLaboral)) AS Email, modelos.Nombre AS Modelo, Color AS Color, NroChasis AS Chasis, '' AS VIN
-						FROM operaciones
-						LEFT JOIN modelos ON operaciones.Marca = modelos.Marca AND operaciones.ModeloPedido = modelos.Codigo
-						WHERE operaciones.Grupo = '$request->grupo' AND operaciones.Orden = $request->orden;");
+                    //consulto datos desde Oliauto
+                    $grupo_orden = 'pf' . str_pad($request->grupo, 5, '0', STR_PAD_LEFT) . str_pad($request->orden, 3, '0', STR_PAD_LEFT);
 
-                    if ($operacion != null) {
-                        $operacion = $operacion[0];
-                        $operacion->accesorios = array();
+                    $result = DB::connection('sqlsrv_cg')->select('EXEC dbo.U0_BUnidadConAccesoriosXOperacVta ?', array($grupo_orden));
+
+                    if($result != null){                        
+                        $convencional = $result[0];
+
+                        $convencional_apellido = '';
+                        $convencional_nombre = '';
+
+                        $array_apellido_nombre = explode (',', trim($convencional->RazonSocial));
+
+                        if (count($array_apellido_nombre) == 2) {
+                            $convencional_apellido = $array_apellido_nombre[0];
+                            $convencional_nombre = $array_apellido_nombre[1];
+                        }
+                        else{
+                            $convencional_apellido = $array_apellido_nombre[0];
+                        }
+
+                        $op_accesorios = array();
+
+                        foreach ($result as $op) {
+                            $op_accesorios[] = trim($op->DescripAccesorio);
+                        } 
+
+
+                        //consulto Telefonos y Email del PA
+                        $operacion_pa = DB::connection('mysql_cg')->select("SELECT Telefonos AS Telefonos1, Telefonos2, Telefonos3, IFNULL(eMail, IFNULL(EmailParticular, EmailLaboral)) AS Email
+                            FROM operaciones
+                            WHERE Grupo = '$request->grupo' AND Orden = $request->orden;");
+
+                        $tel_1 = '';
+                        $tel_1 = '';
+                        $tel_1 = '';
+                        $email = '';
+
+                        if ($operacion_pa != null) {
+                            $operacion_pa = $operacion_pa[0];
+
+                            $tel_1 = $operacion_pa->Telefonos1;
+                            $tel_2 = $operacion_pa->Telefonos2;
+                            $tel_3 = $operacion_pa->Telefonos3;
+                            $email = $operacion_pa->Email;
+                        }
+
+
+                        $operacion = (object) array('Grupo' => $request->grupo, 
+                                                'Orden' => $request->orden, 
+                                                'NroPreventa' => '', 
+                                                'Apellido' => $convencional_apellido, 
+                                                'Nombres' => $convencional_nombre, 
+                                                'Telefonos1' => $tel_1, 
+                                                'Telefonos2' => $tel_2, 
+                                                'Telefonos3' => $tel_3, 
+                                                'Email' => $email, 
+                                                'Modelo' => trim($convencional->DescripModelo),
+                                                'Color' => trim($convencional->DescripColor),
+                                                'Chasis' => trim($convencional->Carroceria),
+                                                'VIN' => trim($convencional->Vin_Carroceria),
+                                                'Vendedor' => trim($convencional->NombreVendedor),
+                                                'accesorios' => (object) $op_accesorios);
+
+
+
+                    }
+                    else{
+                        $operacion = null;
                     }
     				
     			}
@@ -79,6 +140,7 @@ class Operaciones_PA_Controller extends Controller
                                                 'Color' => trim($convencional->DescripColor),
                                                 'Chasis' => trim($convencional->Carroceria),
                                                 'VIN' => trim($convencional->Vin_Carroceria),
+                                                'Vendedor' => trim($convencional->NombreVendedor),
                                                 'accesorios' => (object) $op_accesorios);
 
                     }
@@ -92,14 +154,73 @@ class Operaciones_PA_Controller extends Controller
     		case 2: //JEEP
     			if ($request->tipo_operacion == 1) { //PLAN DE AHORRO
 
-                    $operacion = DB::connection('mysql_det')->select("SELECT operaciones.Grupo, operaciones.Orden, 0 AS NroPreventa, operaciones.Apellido, operaciones.Nombres, operaciones.Telefonos AS Telefonos1, operaciones.Telefonos2, operaciones.Telefonos3, IFNULL(eMail, IFNULL(EmailParticular, EmailLaboral)) AS Email, modelos.Nombre AS Modelo, Color AS Color, NroChasis AS Chasis, '' AS VIN
-                        FROM operaciones
-                        LEFT JOIN modelos ON operaciones.Marca = modelos.Marca AND operaciones.ModeloPedido = modelos.Codigo
-                        WHERE operaciones.Grupo = '$request->grupo' AND operaciones.Orden = $request->orden;");
+                    //consulto datos desde Oliauto
+                    $grupo_orden = 'pf' . str_pad($request->grupo, 5, '0', STR_PAD_LEFT) . str_pad($request->orden, 3, '0', STR_PAD_LEFT);
 
-                    if ($operacion != null) {
-                        $operacion = $operacion[0];
-                        $operacion->accesorios = array();
+                    $result = DB::connection('sqlsrv_det')->select('EXEC dbo.U0_BUnidadConAccesoriosXOperacVta ?', array($grupo_orden));
+
+                    if($result != null){                        
+                        $convencional = $result[0];
+
+                        $convencional_apellido = '';
+                        $convencional_nombre = '';
+
+                        $array_apellido_nombre = explode (',', trim($convencional->RazonSocial));
+
+                        if (count($array_apellido_nombre) == 2) {
+                            $convencional_apellido = $array_apellido_nombre[0];
+                            $convencional_nombre = $array_apellido_nombre[1];
+                        }
+                        else{
+                            $convencional_apellido = $array_apellido_nombre[0];
+                        }
+
+                        $op_accesorios = array();
+
+                        foreach ($result as $op) {
+                            $op_accesorios[] = trim($op->DescripAccesorio);
+                        } 
+
+
+                        //consulto Telefonos y Email del PA
+                        $operacion_pa = DB::connection('mysql_det')->select("SELECT Telefonos AS Telefonos1, Telefonos2, Telefonos3, IFNULL(eMail, IFNULL(EmailParticular, EmailLaboral)) AS Email
+                            FROM operaciones
+                            WHERE Grupo = '$request->grupo' AND Orden = $request->orden;");
+
+                        $tel_1 = '';
+                        $tel_1 = '';
+                        $tel_1 = '';
+                        $email = '';
+
+                        if ($operacion_pa != null) {
+                            $operacion_pa = $operacion_pa[0];
+
+                            $tel_1 = $operacion_pa->Telefonos1;
+                            $tel_2 = $operacion_pa->Telefonos2;
+                            $tel_3 = $operacion_pa->Telefonos3;
+                            $email = $operacion_pa->Email;
+                        }
+
+                        $operacion = (object) array('Grupo' => $request->grupo, 
+                                                'Orden' => $request->orden, 
+                                                'NroPreventa' => '', 
+                                                'Apellido' => $convencional_apellido, 
+                                                'Nombres' => $convencional_nombre, 
+                                                'Telefonos1' => $tel_1, 
+                                                'Telefonos2' => $tel_2, 
+                                                'Telefonos3' => $tel_3, 
+                                                'Email' => $email, 
+                                                'Modelo' => trim($convencional->DescripModelo),
+                                                'Color' => trim($convencional->DescripColor),
+                                                'Chasis' => trim($convencional->Carroceria),
+                                                'VIN' => trim($convencional->Vin_Carroceria),
+                                                'Vendedor' => trim($convencional->NombreVendedor),
+                                                'accesorios' => (object) $op_accesorios);
+
+
+                    }
+                    else{
+                        $operacion = null;
                     }
 
     			}
@@ -143,6 +264,7 @@ class Operaciones_PA_Controller extends Controller
                                                 'Color' => trim($convencional->DescripColor),
                                                 'Chasis' => trim($convencional->Carroceria),
                                                 'VIN' => trim($convencional->Vin_Carroceria),
+                                                'Vendedor' => trim($convencional->NombreVendedor),
                                                 'accesorios' => (object) $op_accesorios);
                     }
                     else{

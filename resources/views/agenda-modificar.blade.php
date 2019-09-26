@@ -259,7 +259,7 @@
               @foreach($accesorios as $accesorio)
               <div class="col-md-3 col-xs-6">
               <label>
-	              <input type="checkbox" class="flat-red" name="acc[{{$accesorio->id}}]" {{($accesorio->encuentraAccesorio($operacion_accesorios)) ? 'checked' : ''}}>
+	              <input type="checkbox" class="flat-red" name="acc[{{$accesorio->id}}]" {{($accesorio->encuentraAccesorio($operacion->accesorios)) ? 'checked' : ''}}>
 				  <span style="font-size: 12px;">{{$accesorio->nombre}}</span>
 	           </label>
               </div>

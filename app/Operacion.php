@@ -157,9 +157,9 @@ class Operacion extends Model
         if (count($this->accesorios) > 0) {
             $res = '';
             foreach ($this->accesorios as $accesorio) {
-                $res .= $accesorio->nombre . ' // ';
+                $res .= $accesorio->nombre . ' ; ';
             }
-            return substr($res, 0, strlen($res)-4);
+            return substr($res, 0, strlen($res)-3);
         }
         else{
             return '';
@@ -172,6 +172,6 @@ class Operacion extends Model
         $difference = ($endtimestamp - $starttimestamp)/3600;
         
         return $difference;
-}
+    }
 
 }

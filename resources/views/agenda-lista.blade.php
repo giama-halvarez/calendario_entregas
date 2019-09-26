@@ -39,6 +39,7 @@
 				</div>
 
 				<div class="col-md-6" style="float: auto;">
+					@if((count($operaciones) > 0))
 					<div class="pull-right" style="margin-top:25px;">
 						<form action="{{route('export_excel')}}" method="POST">
 						@csrf
@@ -48,6 +49,7 @@
 		            	<button type="submit" class="btn btn-success"><i class="fa fa-file-excel-o"></i>&nbsp; Exportar</button>
 						</form>
 					</div>
+					@endif
 				</div>
 
 
