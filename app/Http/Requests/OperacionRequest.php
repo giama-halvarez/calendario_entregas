@@ -34,7 +34,7 @@ class OperacionRequest extends FormRequest
             'telefono1'=>'required|max:50',
             'telefono2'=>'max:50',
             'telefono3'=>'max:50',
-            'chasis'=>'required|max:50',
+            'chasis'=>'required|max:50|unique:operaciones',
             'vin'=>'required|max:50',
             'modelo'=>'required|max:50',
             'color'=>'max:50',

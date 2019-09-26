@@ -140,6 +140,7 @@ class OperacionesController extends Controller
         $op->otros_accesorios = $request->otros_accesorios;
         $op->estado = $request->estado;
         $op->usuario_alta = auth()->user()->name;
+        $op->vendedor = $request->vendedor;
 
         $op->save();
 
@@ -195,6 +196,7 @@ class OperacionesController extends Controller
         $op->otros_accesorios = $request->otros_accesorios;
         $op->estado = $request->estado;
         $op->usuario_alta = auth()->user()->name;
+        $op->vendedor = $request->vendedor;
 
         $op->save();
 
@@ -310,6 +312,7 @@ class OperacionesController extends Controller
         $operacion->modelo = $request->modelo;
         $operacion->color = $request->color;
         $operacion->otros_accesorios = $request->otros_accesorios;
+        $operacion->vendedor = $request->vendedor;
 
         $operacion->save();
 
@@ -421,6 +424,7 @@ class OperacionesController extends Controller
             $obj->otros_accesorios = $op->otros_accesorios;
             $obj->estado = $op->estado;
             $obj->usuario_alta = $op->usuario_alta;
+            $obj->created_at = $op->created_at;
             $obj->fecha_alta_reprogramacion = $op->fecha_alta_reprogramacion;
             $obj->vendedor = $op->vendedor;
 
@@ -432,6 +436,7 @@ class OperacionesController extends Controller
             $oxls->modelo = $obj->modelo;
             $oxls->chasis = $obj->chasis;
             $oxls->vin = $obj->vin;
+            $oxls->vendedor = $obj->vendedor;
             $oxls->fecha_entrega = $obj->fecha_entrega();
             $oxls->hora_entrega = $obj->hora_entrega();
             $oxls->sede_entrega = $obj->sede_entrega->nombre;
@@ -456,6 +461,7 @@ class OperacionesController extends Controller
             'modelo' => 'Modelo',
             'chasis' => 'Chasis',
             'vin' => 'VIN',
+            'vendedor' => 'Vendedor',
             'fecha_entrega' => 'Fecha Entrega',
             'hora_entrega' => 'Hora Entrega',
             'sede_entrega' => 'Sede',

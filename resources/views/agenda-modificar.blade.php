@@ -167,6 +167,15 @@
 	            </div>
         	</div>
 
+          	<div class="form-group col-md-12">
+				<div class="form-group col-md-6">						
+					<label for="txtVendedor">Vendedor</label>
+					<div id="txtVendedor">
+						<input type="text" class="form-control" placeholder="vendedor" name="vendedor" value="{{old('vendedor', $operacion->vendedor)}}">
+					</div>						
+				</div>
+			</div>
+
 			<h4>Datos del Vehículo</h4>
 			<hr class="hr-primary">	
 

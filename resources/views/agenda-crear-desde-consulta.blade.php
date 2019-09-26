@@ -175,6 +175,15 @@
 	            </div>
         	</div>
 
+          	<div class="form-group col-md-12">
+				<div class="form-group col-md-6">						
+					<label for="txtVendedor">Vendedor</label>
+					<div id="txtVendedor">
+						<input type="text" class="form-control" placeholder="vendedor" name="vendedor" value="{{(old('vendedor') == '') ? $operacion->Vendedor : old('vendedor')}}">
+					</div>						
+				</div>
+			</div>
+
 			<br>
 			<h4>Datos del Vehículo</h4>
 			<hr class="hr-primary">	
