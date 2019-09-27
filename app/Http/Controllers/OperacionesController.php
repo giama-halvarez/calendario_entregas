@@ -157,11 +157,12 @@ class OperacionesController extends Controller
             }
         }    
 
-        Mail::to($op->email)->send(new MessageAltaOperacion(env('MAIL_FROM_ADDRESS'), $op));
+        Mail::to($op->email)->send(new MessageAltaOperacion("Programacion de entrega", $op));
 
         $observacion = new Observacion;
         $observacion->operacion_id = $op->id;
         $observacion->descripcion = 'Se ha enviado mail inicial de programacion de entrega';
+        $observacion->usuario_alta = auth()->user()->name;
         $observacion->save();
 
         return redirect('/agenda/ver/pendientes');
@@ -213,11 +214,12 @@ class OperacionesController extends Controller
             }
         }    
 
-        Mail::to($op->email)->send(new MessageAltaOperacion(env('MAIL_FROM_ADDRESS'), $op));
+        Mail::to($op->email)->send(new MessageAltaOperacion("Programacion de entrega", $op));
 
         $observacion = new Observacion;
         $observacion->operacion_id = $op->id;
         $observacion->descripcion = 'Se ha enviado mail inicial de programacion de entrega';
+        $observacion->usuario_alta = auth()->user()->name;
         $observacion->save();
 
         return redirect('/agenda/ver/pendientes');
@@ -352,11 +354,12 @@ class OperacionesController extends Controller
 
         $operacion->update($datos);
 
-        Mail::to($operacion->email)->send(new MessageAltaOperacion(env('MAIL_FROM_ADDRESS'), $operacion));
+        Mail::to($operacion->email)->send(new MessageAltaOperacion("Reprogramacion de entrega", $operacion));
 
         $observacion = new Observacion;
         $observacion->operacion_id = $operacion->id;
         $observacion->descripcion = 'Se ha enviado mail de reprogramacion de entrega';
+        $observacion->usuario_alta = auth()->user()->name;
         $observacion->save();
 
         return redirect('/agenda/ver/pendientes'); 

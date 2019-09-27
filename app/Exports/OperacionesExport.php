@@ -7,8 +7,10 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\WithTitle;
+use \Maatwebsite\Excel\Sheet;
 
-class OperacionesExport implements FromCollection, ShouldAutoSize, WithHeadings
+class OperacionesExport implements FromCollection, ShouldAutoSize, WithHeadings, WithTitle
 {
 	use Exportable;
 
@@ -19,11 +21,24 @@ class OperacionesExport implements FromCollection, ShouldAutoSize, WithHeadings
     {
         $this->operaciones = $operaciones;
         $this->titulos = $titulos;
+
+        Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $style) {
+            $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
+        });
+        
     }
 
     public function headings(): array
     {
         return $this->titulos;
+    }
+
+    /**
+     * @return string
+     */
+    public function title(): string
+    {
+        return 'Operaciones';
     }
 
     /**

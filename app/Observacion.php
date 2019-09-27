@@ -11,6 +11,7 @@ class Observacion extends Model
     protected $connection = 'mysql_calendar';
     protected $fillable = [ 'operacion_id',
                             'descripcion',
+                            'usuario_alta',
                             ];
 
 
