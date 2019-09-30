@@ -158,7 +158,8 @@ class OperacionesController extends Controller
             }
         }    
 
-        Mail::to($op->email)->queue(new MessageAltaOperacion("Programacion de entrega", $op));
+        //Mail::to($op->email)->queue(new MessageAltaOperacion("Programacion de entrega", $op));
+        dispatch(new SendEmailJob($op->email, new MessageAltaOperacion("Programacion de entrega", $op)));
 
         $observacion = new Observacion;
         $observacion->operacion_id = $op->id;
@@ -215,7 +216,8 @@ class OperacionesController extends Controller
             }
         }    
 
-        Mail::to($op->email)->queue(new MessageAltaOperacion("Programacion de entrega", $op));
+        //Mail::to($op->email)->queue(new MessageAltaOperacion("Programacion de entrega", $op));
+        dispatch(new SendEmailJob($op->email, new MessageAltaOperacion("Programacion de entrega", $op)));
 
         $observacion = new Observacion;
         $observacion->operacion_id = $op->id;
