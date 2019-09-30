@@ -25,7 +25,7 @@ class OperacionUpdateRequest extends FormRequest
     {
         return [
             //
-            'nombre'=>'max:50',
+            'nombre'=>'required|max:50',
             'apellido'=>'required|max:50',
             'email'=>'required|email|max:50',
             'telefono1'=>'required|max:50',

@@ -456,14 +456,14 @@
                                 <tr>
                                   <td class="attributes_item">
                                     <span class="f-fallback">
-              <strong>Fecha: </strong> {{$msg->fecha_calendario_entrega->format('d/m/Y')}}
+              <strong>Fecha: </strong> {{date('d-m-Y', strtotime($msg->fecha_calendario_entrega))}}
             </span>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td class="attributes_item">
                                     <span class="f-fallback">
-              <strong>Hora: </strong> {{$msg->fecha_calendario_entrega->format('H:i')}}
+              <strong>Hora: </strong> {{date('H:i', strtotime($msg->fecha_calendario_entrega))}}
             </span>
                                   </td>
                                 </tr>

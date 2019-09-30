@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Jobs\SendEmailJob;
 
 class OperacionesController extends Controller
 {
@@ -157,7 +158,7 @@ class OperacionesController extends Controller
             }
         }    
 
-        Mail::to($op->email)->send(new MessageAltaOperacion("Programacion de entrega", $op));
+        Mail::to($op->email)->queue(new MessageAltaOperacion("Programacion de entrega", $op));
 
         $observacion = new Observacion;
         $observacion->operacion_id = $op->id;
@@ -214,7 +215,7 @@ class OperacionesController extends Controller
             }
         }    
 
-        Mail::to($op->email)->send(new MessageAltaOperacion("Programacion de entrega", $op));
+        Mail::to($op->email)->queue(new MessageAltaOperacion("Programacion de entrega", $op));
 
         $observacion = new Observacion;
         $observacion->operacion_id = $op->id;
@@ -354,7 +355,8 @@ class OperacionesController extends Controller
 
         $operacion->update($datos);
 
-        Mail::to($operacion->email)->send(new MessageAltaOperacion("Reprogramacion de entrega", $operacion));
+        //Mail::to($operacion->email)->queue(new MessageAltaOperacion("Reprogramacion de entrega", $operacion));
+        dispatch(new SendEmailJob($operacion->email, new MessageAltaOperacion("Reprogramacion de entrega", $operacion)));
 
         $observacion = new Observacion;
         $observacion->operacion_id = $operacion->id;
@@ -432,13 +434,18 @@ class OperacionesController extends Controller
             $obj->vendedor = $op->vendedor;
 
             $oxls = new Operacion();
-            $oxls->cliente = $obj->ApeNom();
             $oxls->nro_preventa = $obj->nro_preventa;
             $oxls->grupo_orden = $obj->GrupoOrden();
+            $oxls->cliente = $obj->ApeNom();
+            $oxls->telefono1 = $obj->telefono1;
+            $oxls->telefono2 = $obj->telefono2;
+            $oxls->telefono3 = $obj->telefono3;
+            $oxls->email = $obj->email;
             $oxls->marca = $obj->marca->nombre;
             $oxls->modelo = $obj->modelo;
             $oxls->chasis = $obj->chasis;
             $oxls->vin = $obj->vin;
+            $oxls->color = $obj->color;
             $oxls->vendedor = $obj->vendedor;
             $oxls->fecha_entrega = $obj->fecha_entrega();
             $oxls->hora_entrega = $obj->hora_entrega();
@@ -457,13 +464,18 @@ class OperacionesController extends Controller
         $nombre_archivo = 'entregas_' . $desde . '_' . $hasta . '.xlsx';
 
         $titulos = [
-            'cliente' => 'Cliente',
             'nro_preventa' => 'Preventa',
             'grupo_orden' => 'Grupo - Orden',
+            'cliente' => 'Cliente',
+            'telefono1' => 'Telefono 1',
+            'telefono2' => 'Telefono 2',
+            'telefono3' => 'Telefono 3',
+            'email' => 'Email',
             'marca' => 'Marca',
             'modelo' => 'Modelo',
             'chasis' => 'Chasis',
             'vin' => 'VIN',
+            'color' => 'Color',
             'vendedor' => 'Vendedor',
             'fecha_entrega' => 'Fecha Entrega',
             'hora_entrega' => 'Hora Entrega',
