@@ -171,38 +171,42 @@
 </div>
 
 
-	@if($estado == 'pendientes')
 	@foreach($operaciones as $operacion)
-	
-    <div class="modal fade" id="modal-{{$operacion->id}}">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Confirmación de la operación</h4>
-          </div>
-          <div class="modal-body">
-            <p>¿Seguro desea cambiar el estado de {{$operacion->ApeNom()}} a Entregado?</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
-            <form action="{{route('agenda_entregar')}}" method="POST">
-            	@csrf
-            	<input type="hidden" name="_method" value="PUT">
-            	<input type="hidden" name="operacion_id" value="{{$operacion->id}}">
-            	<input type="hidden" name="entregado" value="1">
-            	<input type="submit" class="btn btn-primary" value="Guardar Estado">
-            </form>
-          </div>
-        </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal-dialog -->
-    </div>
-    <!-- /.modal -->
+
+		@if($estado == 'pendientes')
+		
+	    <div class="modal fade" id="modal-{{$operacion->id}}">
+	      <div class="modal-dialog">
+	        <div class="modal-content">
+	          <div class="modal-header">
+	            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	              <span aria-hidden="true">&times;</span></button>
+	            <h4 class="modal-title">Confirmación de la operación</h4>
+	          </div>
+	          <div class="modal-body">
+	            <p>¿Seguro desea cambiar el estado de {{$operacion->ApeNom()}} a Entregado?</p>
+	          </div>
+	          <div class="modal-footer">
+	            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+	            <form action="{{route('agenda_entregar')}}" method="POST">
+	            	@csrf
+	            	<input type="hidden" name="_method" value="PUT">
+	            	<input type="hidden" name="operacion_id" value="{{$operacion->id}}">
+	            	<input type="hidden" name="entregado" value="1">
+	            	<input type="submit" class="btn btn-primary" value="Guardar Estado">
+	            </form>
+	          </div>
+	        </div>
+	        <!-- /.modal-content -->
+	      </div>
+	      <!-- /.modal-dialog -->
+	    </div>
+	    <!-- /.modal -->
+		    
+		@endif
 
 		@if(count($operacion->observaciones) > 0)
+
 	    <div class="modal fade" id="obs-{{$operacion->id}}">
 	      <div class="modal-dialog">
 	        <div class="modal-content">
@@ -229,7 +233,7 @@
 		    		@endforeach
 
 					</tbody>
-          		</table>
+	      		</table>
 	          </div>
 	        </div>
 	        <!-- /.modal-content -->
@@ -237,10 +241,10 @@
 	      <!-- /.modal-dialog -->
 	    </div>
 	    <!-- /.modal -->
+
 	    @endif
 
 	@endforeach
-	@endif
 
 
 @endsection
