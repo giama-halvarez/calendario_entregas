@@ -38,12 +38,12 @@ class OperacionesController extends Controller
             case 'pendientes':
                 date_add($FechaHasta, date_interval_create_from_date_string('30 days'));
 
-                $operaciones = Operacion::where('estado','=','0')->whereBetween('fecha_calendario_entrega', [$FechaDesde->format('Y-m-d'), $FechaHasta->format('Y-m-d')])->orderBy('fecha_calendario_entrega')->get();
+                $operaciones = Operacion::where('estado','=','0')->where(DB::raw("DATE_FORMAT(fecha_calendario_entrega, '%Y-%m-%d')"), ">=", $FechaDesde->format('Y-m-d'))->where(DB::raw("DATE_FORMAT(fecha_calendario_entrega, '%Y-%m-%d')"), "<=", $FechaHasta->format('Y-m-d'))->orderBy('fecha_calendario_entrega')->get();
                 break;
             case 'entregados':
                 date_add($FechaDesde, date_interval_create_from_date_string('-30 days'));
 
-                $operaciones = Operacion::where('estado','=','1')->whereBetween('fecha_calendario_entrega', [$FechaDesde->format('Y-m-d'), $FechaHasta->format('Y-m-d')])->orderBy('fecha_calendario_entrega')->get();
+                $operaciones = Operacion::where('estado','=','1')->where(DB::raw("DATE_FORMAT(fecha_calendario_entrega, '%Y-%m-%d')"), ">=", $FechaDesde->format('Y-m-d'))->where(DB::raw("DATE_FORMAT(fecha_calendario_entrega, '%Y-%m-%d')"), "<=", $FechaHasta->format('Y-m-d'))->orderBy('fecha_calendario_entrega')->get();
                 break;
             default: 
                 $operaciones = Operacion::orderBy('fecha_calendario_entrega')->get();
@@ -72,10 +72,10 @@ class OperacionesController extends Controller
 
         switch ($estado) {
             case 'pendientes':
-                $operaciones = Operacion::where('estado','=','0')->whereBetween('fecha_calendario_entrega', [$FechaDesde->format('Y-m-d'), $FechaHasta->format('Y-m-d')])->orderBy('fecha_calendario_entrega')->get();
+                $operaciones = Operacion::where('estado','=','0')->where(DB::raw("DATE_FORMAT(fecha_calendario_entrega, '%Y-%m-%d')"), ">=", $FechaDesde->format('Y-m-d'))->where(DB::raw("DATE_FORMAT(fecha_calendario_entrega, '%Y-%m-%d')"), "<=", $FechaHasta->format('Y-m-d'))->orderBy('fecha_calendario_entrega')->get();
                 break;
             case 'entregados':
-                $operaciones = Operacion::where('estado','=','1')->whereBetween('fecha_calendario_entrega', [$FechaDesde->format('Y-m-d'), $FechaHasta->format('Y-m-d')])->orderBy('fecha_calendario_entrega')->get();
+                $operaciones = Operacion::where('estado','=','1')->where(DB::raw("DATE_FORMAT(fecha_calendario_entrega, '%Y-%m-%d')"), ">=", $FechaDesde->format('Y-m-d'))->where(DB::raw("DATE_FORMAT(fecha_calendario_entrega, '%Y-%m-%d')"), "<=", $FechaHasta->format('Y-m-d'))->orderBy('fecha_calendario_entrega')->get();
                 break;
             default: 
                 $operaciones = Operacion::orderBy('fecha_calendario_entrega')->get();
