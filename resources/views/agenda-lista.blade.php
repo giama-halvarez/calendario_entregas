@@ -74,19 +74,11 @@
 					<tbody>
 					<tr style="background-color: #e6e6e6; font-size: 12px">
 						<th></th>
-						<!-- <th>Id</th> -->
-						<!-- <th>Chasis</th> -->
 						<th>Cliente</th>
 						<th>Preventa</th>
 						<th>Grupo y Orden</th>
 						<th>Marca</th>
 						<th>Modelo</th>
-						<!-- <th>Color</th> -->
-						<!-- <th>Vin</th> -->
-						<!-- <th>Telefono1</th> -->
-						<!-- <th>Telefono2</th> -->
-						<!-- <th>Telefono3</th> -->
-						<!-- <th>Email</th> -->
 						<th>Fecha Entrega</th>
 						<th>Hora Entrega</th>
 						<th>Sede Entrega</th>
@@ -123,13 +115,6 @@
 						<td class="text-center">{{$operacion->GrupoOrden()}}</td>
 						<td>{{$operacion->marca->nombre}}</td>
 						<td>{{$operacion->modelo}}</td>
-						<!-- <td>{{$operacion->color}}</td>
-						<td>{{$operacion->vin}}</td>
-						<td>{{$operacion->telefono1}}</td>
-						<td>{{$operacion->telefono2}}</td>
-						<td>{{$operacion->telefono3}}</td>
-						<td>{{$operacion->email}}</td> -->
-						<!-- <td>{{$operacion->semaforo_color()}}</td> -->
 						<td class="text-center"><strong>{{$operacion->fecha_entrega()}}</strong></td>
 						<td class="text-center"><strong>{{$operacion->hora_entrega()}}
 							@if($operacion->estado == 0)
@@ -278,13 +263,15 @@
 		    		}
 		    	}
 
-				if (td.innerHTML.toUpperCase().indexOf(filter) > -1 && ok) {
-					tr[i].style.display = "";
-					cant += 1;
-					break;
-				} else {
-					tr[i].style.display = "none";
-				}
+		    	if (td.style.display == '') {
+					if (td.innerHTML.toUpperCase().indexOf(filter) > -1 && ok) {
+						tr[i].style.display = "";
+						cant += 1;
+						break;
+					} else {
+						tr[i].style.display = "none";
+					}
+		    	}
 		    }
 
 	  	}
