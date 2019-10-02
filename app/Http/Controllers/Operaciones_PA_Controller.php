@@ -154,8 +154,54 @@ class Operaciones_PA_Controller extends Controller
     		case 2: //JEEP
     			if ($request->tipo_operacion == 1) { //PLAN DE AHORRO
 
+                    //consulto datos del PA
+                    $operacion_pa = DB::connection('mysql_det')->select("SELECT operaciones.Grupo, operaciones.Orden, 0 AS NroPreventa, operaciones.Apellido, operaciones.Nombres, operaciones.Telefonos AS Telefonos1, operaciones.Telefonos2, operaciones.Telefonos3, IFNULL(eMail, IFNULL(EmailParticular, EmailLaboral)) AS Email, modelos.Nombre AS Modelo, Color AS Color, NroChasis AS Chasis, '' AS VIN, vendedores.Nombre AS Vendedor
+                        FROM operaciones
+                        LEFT JOIN modelos ON operaciones.Marca = modelos.Marca AND operaciones.ModeloPedido = modelos.Codigo
+                        LEFT JOIN vendedores ON operaciones.Vendedor = vendedores.Codigo
+                        WHERE operaciones.Grupo = '$request->grupo' AND operaciones.Orden = $request->orden;");
+                    
+
+                    if ($operacion_pa != null) {
+                        $operacion_pa = $operacion_pa[0];
+
+                        $op_accesorios = array();
+
+                        //consulto accesorios desde Oliauto
+                        $grupo_orden = 'pf' . str_pad($request->grupo, 5, '0', STR_PAD_LEFT) . str_pad($request->orden, 3, '0', STR_PAD_LEFT);
+
+                        $result = DB::connection('sqlsrv_det')->select('EXEC dbo.U0_BUnidadConAccesoriosXOperacVta ?', array($grupo_orden));
+
+                        if($result != null){
+                            foreach ($result as $op) {
+                                $op_accesorios[] = trim($op->DescripAccesorio);
+                            }
+                        }
+
+
+                        $operacion = (object) array('Grupo' => $request->grupo, 
+                                                'Orden' => $request->orden, 
+                                                'NroPreventa' => '', 
+                                                'Apellido' => $operacion_pa->Apellido, 
+                                                'Nombres' => $operacion_pa->Nombres, 
+                                                'Telefonos1' => $operacion_pa->Telefonos1, 
+                                                'Telefonos2' => $operacion_pa->Telefonos2, 
+                                                'Telefonos3' => $operacion_pa->Telefonos3, 
+                                                'Email' => $operacion_pa->Email, 
+                                                'Modelo' => $operacion_pa->Modelo,
+                                                'Color' => $operacion_pa->Color,
+                                                'Chasis' => $operacion_pa->Chasis,
+                                                'VIN' => $operacion_pa->VIN,
+                                                'Vendedor' => $operacion_pa->Vendedor,
+                                                'accesorios' => (object) $op_accesorios);
+                    }
+                    else{
+                        $operacion = null;
+                    }
+
+
                     //consulto datos desde Oliauto
-                    $grupo_orden = 'pf' . str_pad($request->grupo, 5, '0', STR_PAD_LEFT) . str_pad($request->orden, 3, '0', STR_PAD_LEFT);
+                    /*$grupo_orden = 'pf' . str_pad($request->grupo, 5, '0', STR_PAD_LEFT) . str_pad($request->orden, 3, '0', STR_PAD_LEFT);
 
                     $result = DB::connection('sqlsrv_det')->select('EXEC dbo.U0_BUnidadConAccesoriosXOperacVta ?', array($grupo_orden));
 
@@ -181,47 +227,16 @@ class Operaciones_PA_Controller extends Controller
                             $op_accesorios[] = trim($op->DescripAccesorio);
                         } 
 
-
-                        //consulto Telefonos y Email del PA
-                        $operacion_pa = DB::connection('mysql_det')->select("SELECT Telefonos AS Telefonos1, Telefonos2, Telefonos3, IFNULL(eMail, IFNULL(EmailParticular, EmailLaboral)) AS Email
-                            FROM operaciones
-                            WHERE Grupo = '$request->grupo' AND Orden = $request->orden;");
-
                         $tel_1 = '';
                         $tel_1 = '';
                         $tel_1 = '';
                         $email = '';
 
-                        if ($operacion_pa != null) {
-                            $operacion_pa = $operacion_pa[0];
-
-                            $tel_1 = $operacion_pa->Telefonos1;
-                            $tel_2 = $operacion_pa->Telefonos2;
-                            $tel_3 = $operacion_pa->Telefonos3;
-                            $email = $operacion_pa->Email;
-                        }
-
-                        $operacion = (object) array('Grupo' => $request->grupo, 
-                                                'Orden' => $request->orden, 
-                                                'NroPreventa' => '', 
-                                                'Apellido' => $convencional_apellido, 
-                                                'Nombres' => $convencional_nombre, 
-                                                'Telefonos1' => $tel_1, 
-                                                'Telefonos2' => $tel_2, 
-                                                'Telefonos3' => $tel_3, 
-                                                'Email' => $email, 
-                                                'Modelo' => trim($convencional->DescripModelo),
-                                                'Color' => trim($convencional->DescripColor),
-                                                'Chasis' => trim($convencional->Carroceria),
-                                                'VIN' => trim($convencional->Vin_Carroceria),
-                                                'Vendedor' => trim($convencional->NombreVendedor),
-                                                'accesorios' => (object) $op_accesorios);
-
 
                     }
                     else{
                         $operacion = null;
-                    }
+                    }*/
 
     			}
     			elseif ($request->tipo_operacion == 2) { //CONVENCIONAL
