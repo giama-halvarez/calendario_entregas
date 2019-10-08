@@ -45,6 +45,7 @@ class OperacionesExport implements FromCollection, ShouldAutoSize, WithHeadings,
      */
     public function registerEvents(): array
     {
+
         return [
             BeforeExport::class  => function(BeforeExport $event) {
                 $event->writer->setCreator('Grupo Giama');
@@ -52,17 +53,27 @@ class OperacionesExport implements FromCollection, ShouldAutoSize, WithHeadings,
             AfterSheet::class    => function(AfterSheet $event) {
                 $event->sheet->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
 
+                /*$event->sheet->styleCells(
+                    "B2:B10",
+                    [
+                        'alignment' => [
+                            'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER
+                        ]
+                    ]
+                );*/
+
                 $event->sheet->styleCells(
                     'A1:U1',
                     [
                         'font' => [
                             'bold' => true,
-                        ],                 
+                        ],
                         'alignment' => [
                             'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER
                         ]
                     ]
                 );
+
             },
         ];
     }

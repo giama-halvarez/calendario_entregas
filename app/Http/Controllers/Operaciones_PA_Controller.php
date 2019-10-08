@@ -63,8 +63,8 @@ class Operaciones_PA_Controller extends Controller
                             WHERE Grupo = '$request->grupo' AND Orden = $request->orden;");
 
                         $tel_1 = '';
-                        $tel_1 = '';
-                        $tel_1 = '';
+                        $tel_2 = '';
+                        $tel_3 = '';
                         $email = '';
 
                         if ($operacion_pa != null) {
@@ -92,8 +92,6 @@ class Operaciones_PA_Controller extends Controller
                                                 'VIN' => trim($convencional->Vin_Carroceria),
                                                 'Vendedor' => trim($convencional->NombreVendedor),
                                                 'accesorios' => (object) $op_accesorios);
-
-
 
                     }
                     else{

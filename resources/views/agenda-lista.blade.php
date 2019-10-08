@@ -120,10 +120,10 @@
 							@if($operacion->estado == 0)
 								@switch(true)    
 								@case($operacion->alerta_entrega() < 0 && $operacion->alerta_entrega() > -3)
-									<i class="fa fa-fw fa-warning text-yellow"></i>
+									<i class="fa fa-fw fa-warning text-yellow" title="La entrega se efectuará pronto"></i>
 									@break
 								@case($operacion->alerta_entrega() > 0)
-									<i class="fa fa-fw fa-warning text-red"></i>
+									<i class="fa fa-fw fa-warning text-red" title="Se ha pasado la fecha de entrega"></i>
 									@break
 								@endswitch
 							@endif
