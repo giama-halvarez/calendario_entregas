@@ -259,7 +259,8 @@
     //Date picker
     $('#datepicker').datepicker({
       autoclose: true,
-      format:'dd/mm/yyyy'
+      format:'dd/mm/yyyy',
+      startDate: '{{date_format(now(), 'd/m/Y')}}'
     })
 
     //iCheck for checkbox and radio inputs
