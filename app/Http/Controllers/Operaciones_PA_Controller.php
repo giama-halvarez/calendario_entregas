@@ -57,6 +57,7 @@ class Operaciones_PA_Controller extends Controller
                         } 
 
 
+
                         //consulto Telefonos y Email del PA
                         $operacion_pa = DB::connection('mysql_cg')->select("SELECT Telefonos AS Telefonos1, Telefonos2, Telefonos3, IFNULL(eMail, IFNULL(EmailParticular, EmailLaboral)) AS Email
                             FROM operaciones
@@ -159,7 +160,6 @@ class Operaciones_PA_Controller extends Controller
                         LEFT JOIN vendedores ON operaciones.Vendedor = vendedores.Codigo
                         WHERE operaciones.Grupo = '$request->grupo' AND operaciones.Orden = $request->orden;");
                     
-
                     if ($operacion_pa != null) {
                         $operacion_pa = $operacion_pa[0];
 
@@ -196,45 +196,6 @@ class Operaciones_PA_Controller extends Controller
                     else{
                         $operacion = null;
                     }
-
-
-                    //consulto datos desde Oliauto
-                    /*$grupo_orden = 'pf' . str_pad($request->grupo, 5, '0', STR_PAD_LEFT) . str_pad($request->orden, 3, '0', STR_PAD_LEFT);
-
-                    $result = DB::connection('sqlsrv_det')->select('EXEC dbo.U0_BUnidadConAccesoriosXOperacVta ?', array($grupo_orden));
-
-                    if($result != null){                        
-                        $convencional = $result[0];
-
-                        $convencional_apellido = '';
-                        $convencional_nombre = '';
-
-                        $array_apellido_nombre = explode (',', trim($convencional->RazonSocial));
-
-                        if (count($array_apellido_nombre) == 2) {
-                            $convencional_apellido = $array_apellido_nombre[0];
-                            $convencional_nombre = $array_apellido_nombre[1];
-                        }
-                        else{
-                            $convencional_apellido = $array_apellido_nombre[0];
-                        }
-
-                        $op_accesorios = array();
-
-                        foreach ($result as $op) {
-                            $op_accesorios[] = trim($op->DescripAccesorio);
-                        } 
-
-                        $tel_1 = '';
-                        $tel_1 = '';
-                        $tel_1 = '';
-                        $email = '';
-
-
-                    }
-                    else{
-                        $operacion = null;
-                    }*/
 
     			}
     			elseif ($request->tipo_operacion == 2) { //CONVENCIONAL
