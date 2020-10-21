@@ -479,6 +479,10 @@
                           </tr>
                         </table>
                         <p>No olvide concurrir a la sucursal con DNI del titular</p>
+
+                        <p><strong>Estimado cliente, por la emergencia sanitaria del COVID19, le pedimos, por favor que el día de la entrega de su 0KM no acuda con más de un acompañante.</strong></p>
+                        <p><strong>Agradecemos su atención y amabilidad.</strong></p>
+                        <p><strong>Entre todos, nos cuidamos.</strong></p>
                       </div>
                     </td>
                   </tr>
