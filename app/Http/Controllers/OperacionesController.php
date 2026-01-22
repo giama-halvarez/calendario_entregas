@@ -285,7 +285,8 @@ class OperacionesController extends Controller
             $marcas = Marca::where('activo','=',1)->orderBy('nombre')->get();
             $sedes_entrega = SedeEntrega::where('activo','=',1)->orderBy('nombre')->get();
             $tipos_operacion = (new TipoOperacion)->get_tipos();
-            
+	    $accesorios = Accesorio::where('activo','=',1)->orderBy('nombre')->get();
+
             return view('agenda-modificar-entrega', compact('operacion', 'marcas', 'sedes_entrega', 'tipos_operacion', 'accesorios'));
         }
         else{
