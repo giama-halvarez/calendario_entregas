@@ -25,7 +25,7 @@ class ConsultaRequest extends FormRequest
     {
         return [
             'grupo' => 'required_if:tipo_operacion,==,1|numeric',
-            'orden' => 'required_if:tipo_operacion,==,1|numeric|min:1|max:168',
+            'orden' => 'required_if:tipo_operacion,==,1|numeric|min:1|max:241',
             'nro_preventa' => 'required_if:tipo_operacion,==,2',
             //
         ];
