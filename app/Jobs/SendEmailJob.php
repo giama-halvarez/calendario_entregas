@@ -17,7 +17,6 @@ class SendEmailJob implements ShouldQueue
 
     protected $destinatario;
     protected $mail;
-    public $queue = 'mail';
 
     /**
      * Create a new job instance.
@@ -27,6 +26,7 @@ class SendEmailJob implements ShouldQueue
     public function __construct($destinatario, $mail)
     {
         //
+        $this->onQueue('mail');
         $this->destinatario = $destinatario;
         $this->mail = $mail;
     }
