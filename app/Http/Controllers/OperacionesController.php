@@ -173,7 +173,7 @@ class OperacionesController extends Controller
         $observacion->operacion_id = $op->id;
         $observacion->descripcion = 'Se ha enviado mail inicial de programacion de entrega';
         $observacion->usuario_alta = auth()->user()->name;
-        //$observacion->save();
+        $observacion->save();
 
         return redirect('/agenda/ver/pendientes');
         
@@ -238,7 +238,7 @@ class OperacionesController extends Controller
         $observacion->operacion_id = $op->id;
         $observacion->descripcion = 'Se ha enviado mail inicial de programacion de entrega';
         $observacion->usuario_alta = auth()->user()->name;
-        //$observacion->save();
+        $observacion->save();
 
         return redirect('/agenda/ver/pendientes');
         
@@ -387,7 +387,7 @@ class OperacionesController extends Controller
         $observacion->operacion_id = $operacion->id;
         $observacion->descripcion = 'Se ha enviado mail de reprogramacion de entrega';
         $observacion->usuario_alta = auth()->user()->name;
-        //$observacion->save();
+        $observacion->save();
 
         return redirect('/agenda/ver/pendientes'); 
     }
