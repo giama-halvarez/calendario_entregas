@@ -7,6 +7,7 @@ use App\Http\Requests\EntregaUpdateRequest;
 use App\Http\Requests\OperacionRequest;
 use App\Http\Requests\OperacionUpdateRequest;
 use App\Mail\MessageAltaOperacion;
+use App\Config;
 use App\Marca;
 use App\Observacion;
 use App\Operacion;
@@ -145,6 +146,8 @@ class OperacionesController extends Controller
 
         $op->save();
 
+        $op->marca = Marca::where('id', $op->marca_id)->first();
+
         $last_id = DB::getPDO()->lastInsertId();
 
 
@@ -159,13 +162,18 @@ class OperacionesController extends Controller
         }    
 
         //Mail::to($op->email)->queue(new MessageAltaOperacion("Programacion de entrega", $op));
-        //dispatch(new SendEmailJob($op->email, new MessageAltaOperacion("Programacion de entrega", $op)));
+        dispatch(new SendEmailJob($op->email, new MessageAltaOperacion("Programacion de entrega", $op)));
+
+        $emails = Config::where('clave', 'email_notif')->get();
+        foreach($emails as $e) {
+            dispatch(new SendEmailJob($e->valor, new MessageAltaOperacion("Programacion de entrega", $op)));
+        }
 
         $observacion = new Observacion;
         $observacion->operacion_id = $op->id;
         $observacion->descripcion = 'Se ha enviado mail inicial de programacion de entrega';
         $observacion->usuario_alta = auth()->user()->name;
-        $observacion->save();
+        //$observacion->save();
 
         return redirect('/agenda/ver/pendientes');
         
@@ -203,6 +211,8 @@ class OperacionesController extends Controller
 
         $op->save();
 
+        $op->marca = Marca::where('id', $op->marca_id)->first();
+
         $last_id = DB::getPDO()->lastInsertId();
         
 
@@ -217,13 +227,18 @@ class OperacionesController extends Controller
         }    
 
         //Mail::to($op->email)->queue(new MessageAltaOperacion("Programacion de entrega", $op));
-        //dispatch(new SendEmailJob($op->email, new MessageAltaOperacion("Programacion de entrega", $op)));
+        dispatch(new SendEmailJob($op->email, new MessageAltaOperacion("Programacion de entrega", $op)));
+
+        $emails = Config::where('clave', 'email_notif')->get();
+        foreach($emails as $e) {
+            dispatch(new SendEmailJob($e->valor, new MessageAltaOperacion("Programacion de entrega", $op)));
+        }
 
         $observacion = new Observacion;
         $observacion->operacion_id = $op->id;
         $observacion->descripcion = 'Se ha enviado mail inicial de programacion de entrega';
         $observacion->usuario_alta = auth()->user()->name;
-        $observacion->save();
+        //$observacion->save();
 
         return redirect('/agenda/ver/pendientes');
         
@@ -358,14 +373,21 @@ class OperacionesController extends Controller
 
         $operacion->update($datos);
 
+        $operacion->marca = Marca::where('id', $operacion->marca_id)->first();
+
         //Mail::to($operacion->email)->queue(new MessageAltaOperacion("Reprogramacion de entrega", $operacion));
-        //dispatch(new SendEmailJob($operacion->email, new MessageAltaOperacion("Reprogramacion de entrega", $operacion)));
+        dispatch(new SendEmailJob($operacion->email, new MessageAltaOperacion("Reprogramacion de entrega", $operacion)));
+
+        $emails = Config::where('clave', 'email_notif')->get();
+        foreach($emails as $e) {
+            dispatch(new SendEmailJob($e->valor, new MessageAltaOperacion("Programacion de entrega", $operacion)));
+        }
 
         $observacion = new Observacion;
         $observacion->operacion_id = $operacion->id;
         $observacion->descripcion = 'Se ha enviado mail de reprogramacion de entrega';
         $observacion->usuario_alta = auth()->user()->name;
-        $observacion->save();
+        //$observacion->save();
 
         return redirect('/agenda/ver/pendientes'); 
     }

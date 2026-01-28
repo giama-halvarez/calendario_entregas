@@ -36,7 +36,7 @@ class OperacionUpdateRequest extends FormRequest
             'modelo'=>'required|max:50',
             'color'=>'max:50',
             'grupo' => 'required_if:tipo_operacion,==,1|numeric',
-            'orden' => 'required_if:tipo_operacion,==,1|numeric|min:1|max:168',
+            'orden' => 'required_if:tipo_operacion,==,1|numeric|min:1|max:240',
             'nro_preventa' => 'required_if:tipo_operacion,==,2|unique:operaciones',
         ];
     }

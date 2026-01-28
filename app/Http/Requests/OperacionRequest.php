@@ -41,7 +41,7 @@ class OperacionRequest extends FormRequest
             'sede_entrega'=>'required',
             'fecha_calendario_entrega'=>['required', new OperacionFechaRule, new OperacionHorarioEntregaRule, new OperacionHoraSedeEntregaRepetidoRule(request()->sede_entrega, request()->fecha_calendario_entrega)],
             'grupo' => 'required_if:tipo_operacion,==,1|numeric',
-            'orden' => 'required_if:tipo_operacion,==,1|numeric|min:1|max:168',
+            'orden' => 'required_if:tipo_operacion,==,1|numeric|min:1|max:240',
             'nro_preventa' => 'required_if:tipo_operacion,==,2|unique:operaciones',
         ];
     }

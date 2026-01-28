@@ -435,7 +435,7 @@
           <table class="email-content" width="100%" cellpadding="0" cellspacing="0" role="presentation">
             <tr>
               <td class="email-masthead">
-                Grupo Giama
+              Citroën - Giama
               </td>
             </tr>
             <!-- Email Body -->
@@ -447,7 +447,7 @@
                     <td class="content-cell">
                       <div class="f-fallback">
                         <h1>Estimado {{$msg->ApeNom()}}</h1>
-                        <p>Se ha establecido una nueva fecha de entrega</p>
+                        <p>Se ha establecido una nueva fecha de entrega para su unidad 0KM {{ $msg->marca->nombre}} {{$msg->modelo}}.</p>
                         <p>Los datos de la entrega son:</p>
                         <table class="attributes" width="100%" cellpadding="0" cellspacing="0" role="presentation">
                           <tr>
@@ -478,11 +478,12 @@
                             </td>
                           </tr>
                         </table>
-                        <p>No olvide concurrir a la sucursal con DNI del titular</p>
-
-                        <p><strong>Estimado cliente, por la emergencia sanitaria del COVID19, le pedimos, por favor que el día de la entrega de su 0KM no acuda con más de un acompañante.</strong></p>
-                        <p><strong>Agradecemos su atención y amabilidad.</strong></p>
-                        <p><strong>Entre todos, nos cuidamos.</strong></p>
+                        <p>No olvide concurrir a la sucursal con DNI del titular y documentación de la unidad en el caso de corresponder.</p>
+                        <p>Agradecemos su atención y amabilidad.</p>
+                        <p><strong>Elysees S.A. - Concesionario oficial Citroen</strong>
+                        <br>
+                          <small>Departamento Entrega Unidades Plan de Ahorro</small>
+                        </p>
                       </div>
                     </td>
                   </tr>
