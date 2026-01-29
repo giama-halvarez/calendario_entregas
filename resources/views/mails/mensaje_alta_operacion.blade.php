@@ -470,7 +470,7 @@
                                 <tr>
                                   <td class="attributes_item">
                                     <span class="f-fallback">
-              <strong>Sucursal: </strong> {{$msg->sede_entrega->nombre}}({{$msg->sede_entrega->direccion}})
+              <strong>Sucursal: </strong> {{$msg->sede_entrega->nombre}}
             </span>
                                   </td>
                                 </tr>
