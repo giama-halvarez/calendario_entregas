@@ -6,6 +6,8 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Marca;
+use App\Operacion;
 
 class MessageAltaOperacion extends Mailable
 {
@@ -19,9 +21,13 @@ class MessageAltaOperacion extends Mailable
      *
      * @return void
      */
-    public function __construct($subject, $datos)
+    public function __construct($subject, $operacion_id)
     {
         //
+        $datos = Operacion::where('id', $operacion_id)->first();
+
+        $datos->marca = Marca::where('id', $datos->marca_id)->first();
+
         $this->subject = $subject;
         $this->msg = $datos;
     }
