@@ -79,6 +79,7 @@
 						<th>Grupo y Orden</th>
 						<th>Marca</th>
 						<th>Modelo</th>
+						<th>Chasis</th>
 						<th>Fecha Entrega</th>
 						<th>Hora Entrega</th>
 						<th>Sede Entrega</th>
@@ -115,6 +116,7 @@
 						<td class="text-center">{{$operacion->GrupoOrden()}}</td>
 						<td>{{$operacion->marca->nombre}}</td>
 						<td>{{$operacion->modelo}}</td>
+						<td>{{ $operacion->chasis}}</td>
 						<td class="text-center"><strong>{{$operacion->fecha_entrega()}}</strong></td>
 						<td class="text-center"><strong>{{$operacion->hora_entrega()}}
 							@if($operacion->estado == 0)
